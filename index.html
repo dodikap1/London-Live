@@ -6,362 +6,337 @@
 <title>London Live</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg:#FFFDF7; --bg-card:#FFFFFF; --bg-dark:#0D0D0D;
-    --text-primary:#0D0D0D; --text-secondary:#555550; --text-muted:#999990; --text-inverse:#FFFDF7;
-    --accent-red:#E8294A; --accent-yellow:#FFD93D; --accent-teal:#00C2A8;
-    --accent-purple:#7C3AED; --accent-orange:#FF6B35; --accent-blue:#2563EB;
-    --accent-pink:#EC4899; --accent-green:#16A34A;
-    --cat-music:#E8294A; --cat-sport:#2563EB; --cat-arts:#7C3AED; --cat-food:#FF6B35;
-    --cat-family:#FFD93D; --cat-comedy:#EC4899; --cat-festivals:#00C2A8; --cat-science:#16A34A;
-    --avail-available:#16A34A; --avail-fast:#F59E0B; --avail-soldout:#9CA3AF; --avail-free:#00C2A8;
-    --border:#E8E8E0;
-    --shadow-sm:0 1px 3px rgba(0,0,0,0.06); --shadow-md:0 4px 16px rgba(0,0,0,0.08);
-    --shadow-lg:0 8px 32px rgba(0,0,0,0.12); --shadow-xl:0 20px 60px rgba(0,0,0,0.16);
-    --radius-sm:6px; --radius-md:12px; --radius-lg:20px; --radius-xl:28px;
-    --nav-h:64px; --transition:0.2s cubic-bezier(0.4,0,0.2,1);
-  }
-  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-  html{scroll-behavior:smooth;}
-  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text-primary);line-height:1.5;min-height:100vh;}
+/* ── TOKENS ── */
+:root {
+  /* Donadieu palette — light edition */
+  --bg: #FFFDF7;               /* linen */
+  --bg-card: #FFFFFF;
+  --bg-dark: #0E1624;          /* deep navy */
+  --bg-mid: #1C2B3A;           /* mid navy (motives banner) */
+  --text-primary: #0E1624;
+  --text-secondary: #4A5568;
+  --text-muted: #94A3B8;
+  --text-inverse: #FFFDF7;
 
-  /* NAV */
-  nav{position:sticky;top:0;z-index:100;height:var(--nav-h);background:var(--bg-dark);display:flex;align-items:center;justify-content:space-between;padding:0 24px;gap:16px;}
-  .nav-logo{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--text-inverse);letter-spacing:2px;flex-shrink:0;}
-  .nav-logo span{color:var(--accent-red);}
-  .nav-search{flex:1;max-width:480px;position:relative;}
-  .nav-search input{width:100%;height:40px;background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.15);border-radius:40px;padding:0 16px 0 44px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text-inverse);outline:none;transition:var(--transition);}
-  .nav-search input::placeholder{color:rgba(255,255,255,0.4);}
-  .nav-search input:focus{border-color:var(--accent-yellow);background:rgba(255,255,255,0.15);}
-  .nav-search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,0.4);pointer-events:none;}
-  .nav-right{display:flex;align-items:center;gap:12px;}
-  .api-btn{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:8px 16px;border-radius:40px;border:1.5px solid rgba(255,255,255,0.2);background:transparent;color:rgba(255,255,255,0.7);cursor:pointer;transition:var(--transition);}
-  .api-btn:hover{background:rgba(255,255,255,0.1);color:#fff;}
-  .api-btn.configured{border-color:var(--accent-teal);color:var(--accent-teal);}
-  .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none;}
-  .hamburger span{display:block;width:24px;height:2px;background:#fff;border-radius:2px;}
+  /* Core accents */
+  --accent: #C84B1F;           /* bright leather — primary CTA */
+  --accent-deep: #8B3A18;      /* darker leather — hover states */
+  --accent-light: #F0A882;     /* pale leather — light badges */
+  --navy: #0E1624;
+  --navy-mid: #1C2B3A;
+  --navy-light: #2D4A6B;       /* mid blue depth */
+  --linen: #F5EFE4;            /* warm linen tint */
+  --gold: #C8922A;             /* warm gold — replaces yellow */
+  --gold-light: #F5D78E;       /* pale gold */
 
-  /* ── MOTIVES BANNER ── */
-  .motives-banner{background:#0D0D0D;border-bottom:1px solid rgba(255,255,255,0.06);padding:20px 0 24px;position:relative;overflow:hidden;}
-  .motives-banner::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(232,41,74,0.12) 0%,transparent 60%),radial-gradient(ellipse at 80% 50%,rgba(124,58,237,0.08) 0%,transparent 60%);pointer-events:none;}
-  .motives-header{display:flex;align-items:center;justify-content:space-between;padding:0 24px;margin-bottom:16px;position:relative;}
-  .motives-title-group{display:flex;align-items:center;gap:14px;}
-  .motives-title{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:2px;color:#fff;line-height:1;}
-  .rec-badge{display:inline-flex;align-items:center;gap:6px;background:var(--accent-red);color:#fff;font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;padding:5px 10px;border-radius:4px;position:relative;top:-2px;}
-  .rec-dot{width:8px;height:8px;background:#fff;border-radius:50%;animation:recpulse 1.2s ease infinite;flex-shrink:0;}
-  @keyframes recpulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
-  .motives-tags{display:flex;align-items:center;gap:6px;}
-  .motives-tag{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.35);padding:3px 8px;border:1px solid rgba(255,255,255,0.1);border-radius:4px;}
-  .motives-scroll-wrap{position:relative;}
-  .motives-scroll-wrap::after{content:'';position:absolute;right:0;top:0;bottom:0;width:80px;background:linear-gradient(to right,transparent,#0D0D0D);pointer-events:none;z-index:2;}
-  .motives-track{display:flex;gap:14px;padding:4px 24px 8px;overflow-x:auto;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
-  .motives-track::-webkit-scrollbar{display:none;}
+  /* Category colours — warmer, on-palette */
+  --cat-music: #C84B1F;        /* leather */
+  --cat-sport: #2D4A6B;        /* navy mid */
+  --cat-arts: #6B3FA0;         /* muted purple */
+  --cat-food: #B85C1A;         /* burnt orange */
+  --cat-family: #C8922A;       /* gold */
+  --cat-comedy: #C2476B;       /* rose */
+  --cat-festivals: #1A7A6B;    /* deep teal */
+  --cat-science: #1A6B3F;      /* forest green */
 
-  /* MOTIVE CARD */
-  .motive-card{
-    flex-shrink:0; width:260px;
-    background:rgba(255,255,255,0.05);
-    border:1px solid rgba(255,255,255,0.09);
-    border-radius:var(--radius-md);
-    overflow:hidden; cursor:pointer;
-    transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1), border-color 0.2s ease, box-shadow 0.2s ease, width 0.25s ease;
-    display:flex; flex-direction:column;
-    position:relative;
-  }
-  .motive-card:hover{
-    transform:scale(1.04) translateY(-4px);
-    border-color:rgba(255,255,255,0.25);
-    box-shadow:0 16px 48px rgba(0,0,0,0.5);
-    width:300px;
-    z-index:10;
-  }
-  .motive-card-stripe{height:3px;width:100%;transition:height 0.2s ease;}
-  .motive-card:hover .motive-card-stripe{height:5px;}
-  .motive-card-top{padding:14px 14px 10px;display:flex;flex-direction:column;gap:8px;}
-  .motive-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
-  .motive-card-title{font-size:13px;font-weight:700;color:#fff;line-height:1.3;flex:1;}
-  .motive-avail{flex-shrink:0;display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:700;font-family:'DM Mono',monospace;padding:2px 7px;border-radius:40px;text-transform:uppercase;letter-spacing:0.5px;}
-  .motive-avail.available{background:rgba(22,163,74,0.2);color:#4ade80;}
-  .motive-avail.fast{background:rgba(245,158,11,0.2);color:#fbbf24;}
-  .motive-avail.free{background:rgba(0,194,168,0.2);color:#2dd4bf;}
-  .motive-avail.sold-out{background:rgba(156,163,175,0.15);color:#9CA3AF;}
-  .motive-avail-dot{width:5px;height:5px;border-radius:50%;background:currentColor;}
-  .motive-card-meta{display:flex;flex-direction:column;gap:4px;}
-  .motive-meta-row{display:flex;align-items:center;gap:5px;font-size:11px;color:rgba(255,255,255,0.5);}
-  .motive-meta-row svg{opacity:0.6;flex-shrink:0;}
-  .motive-card-footer{padding:10px 14px;border-top:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:space-between;gap:8px;}
-  .motive-price{font-family:'DM Mono',monospace;font-size:15px;font-weight:500;color:#fff;}
-  .motive-price.free{color:#2dd4bf;}
-  .motive-cta{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;padding:6px 14px;border-radius:40px;border:none;cursor:pointer;transition:var(--transition);text-decoration:none;display:inline-block;white-space:nowrap;}
-  .motive-cta.available{background:var(--accent-red);color:#fff;}
-  .motive-cta.available:hover{background:#c8213a;}
-  .motive-cta.fast{background:var(--avail-fast);color:#fff;}
-  .motive-cta.free{background:var(--accent-teal);color:#fff;}
-  .motive-cta.sold-out{background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.3);cursor:not-allowed;}
-  .motive-cat-pill{font-size:10px;font-weight:700;padding:2px 8px;border-radius:40px;color:#fff;letter-spacing:0.3px;display:inline-block;margin-top:4px;}
+  /* Availability */
+  --avail-green: #1A6B3F;
+  --avail-amber: #C8922A;
+  --avail-grey: #94A3B8;
+  --avail-teal: #1A7A6B;
 
-  /* EXPANDED VIBE PANEL — slides in on hover */
-  .motive-expand{
-    max-height:0; overflow:hidden;
-    transition:max-height 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.2s ease;
-    opacity:0;
-    background:rgba(0,0,0,0.3);
-    border-top:1px solid rgba(255,255,255,0.06);
-  }
-  .motive-card:hover .motive-expand{max-height:200px;opacity:1;}
-  .motive-expand-inner{padding:12px 14px;display:flex;flex-direction:column;gap:9px;}
-  .motive-expand-row{display:flex;flex-direction:column;gap:2px;}
-  .motive-expand-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.3);}
-  .motive-expand-value{font-size:11px;color:rgba(255,255,255,0.75);line-height:1.4;}
+  --border: #E8E4DC;
+  --shadow-sm: 0 1px 3px rgba(14,22,36,0.06);
+  --shadow-md: 0 4px 16px rgba(14,22,36,0.08);
+  --shadow-lg: 0 8px 32px rgba(14,22,36,0.12);
+  --shadow-xl: 0 20px 60px rgba(14,22,36,0.18);
+  --r-sm: 6px; --r-md: 12px; --r-lg: 20px; --r-xl: 28px;
+  --nav-h: 64px;
+  --ease: 0.2s cubic-bezier(0.4,0,0.2,1);
+}
 
-  /* HERO */
-  .hero{background:var(--bg-dark);padding:32px 24px 0;}
-  .hero-top{max-width:1200px;margin:0 auto 24px;display:flex;align-items:flex-start;flex-direction:column;gap:10px;}
-  .hero-headline{font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,6vw,80px);line-height:0.9;color:var(--text-inverse);letter-spacing:2px;animation:headlineIn 0.6s ease both;}
-  .hero-headline em{color:var(--accent-yellow);font-style:normal;}
-  .hero-sub{font-size:14px;color:rgba(255,255,255,0.45);max-width:100%;text-align:left;line-height:1.6;display:flex;align-items:center;gap:16px;}
-  .hero-body{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:55fr 45fr;gap:28px;align-items:start;}
-  .map-container{position:relative;}
-  .map-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:10px;}
+/* ── RESET ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text-primary); line-height: 1.5; min-height: 100vh; }
 
-  /* MAP */
-  #london-map{width:100%;height:auto;cursor:pointer;background:#1a5f8a;border-radius:var(--radius-md);display:block;}
-  #london-map .borough{fill:#1a2332;stroke:rgba(255,255,255,0.18);stroke-width:0.6;transition:fill 0.15s ease,stroke 0.15s ease;}
-  #london-map .borough:hover{fill:rgba(232,41,74,0.35);stroke:rgba(255,255,255,0.4);cursor:pointer;}
-  #london-map .borough.selected{fill:var(--accent-red);stroke:var(--accent-yellow);stroke-width:1.2;}
-  #london-map .borough-label{font-family:'DM Sans',sans-serif;font-size:6.5px;fill:rgba(255,255,255,0.5);pointer-events:none;font-weight:600;}
+/* ── NAV ── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  height: var(--nav-h); background: var(--navy);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 24px; gap: 16px;
+}
+.nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 2px; color: var(--text-inverse); flex-shrink: 0; }
+.nav-logo span { color: var(--accent); }
+.nav-search { flex: 1; max-width: 480px; position: relative; }
+.nav-search input {
+  width: 100%; height: 40px;
+  background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.15);
+  border-radius: 40px; padding: 0 16px 0 44px;
+  font-family: 'DM Sans', sans-serif; font-size: 14px; color: #fff; outline: none;
+  transition: var(--ease);
+}
+.nav-search input::placeholder { color: rgba(255,255,255,0.4); }
+.nav-search input:focus { border-color: var(--gold); background: rgba(255,255,255,0.15); }
+.search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,0.4); pointer-events: none; }
+.api-btn {
+  font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600;
+  padding: 8px 16px; border-radius: 40px;
+  border: 1.5px solid rgba(255,255,255,0.2); background: transparent;
+  color: rgba(255,255,255,0.7); cursor: pointer; transition: var(--ease);
+}
+.api-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.api-btn.ok { border-color: var(--gold); color: var(--gold); }
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
+.hamburger span { display: block; width: 24px; height: 2px; background: #fff; border-radius: 2px; }
 
-  /* THAMES */
+/* ── SEARCH DROPDOWN ── */
+.search-dropdown {
+  display: none; position: absolute; top: calc(100% + 8px); left: 0; right: 0;
+  background: #1a1a1a; border: 1px solid rgba(255,255,255,0.12);
+  border-radius: var(--r-md); z-index: 999;
+  box-shadow: var(--shadow-xl); max-height: 400px; overflow-y: auto;
+}
+.search-dropdown.open { display: block; }
+.sd-header { padding: 8px 14px; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.3); border-bottom: 1px solid rgba(255,255,255,0.06); }
+.sd-item { display: flex; align-items: center; gap: 12px; padding: 10px 14px; cursor: pointer; transition: background var(--ease); border-bottom: 1px solid rgba(255,255,255,0.04); }
+.sd-item:last-child { border-bottom: none; }
+.sd-item:hover { background: rgba(255,255,255,0.06); }
+.sd-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.sd-info { flex: 1; min-width: 0; }
+.sd-title { font-size: 13px; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sd-title mark { background: rgba(200,146,42,0.25); color: var(--gold); border-radius: 2px; padding: 0 1px; }
+.sd-sub { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sd-price { font-family: 'DM Mono', monospace; font-size: 12px; color: rgba(255,255,255,0.6); flex-shrink: 0; }
+.sd-price.free { color: var(--teal); }
+.sd-empty { padding: 20px 14px; text-align: center; font-size: 13px; color: rgba(255,255,255,0.35); font-family: 'DM Mono', monospace; }
+.sd-empty span { display: block; font-size: 11px; margin-top: 4px; color: rgba(255,255,255,0.2); }
 
+/* ── MOTIVES BANNER ── */
+.motives {
+  background: var(--bg-mid); border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding: 20px 0 24px; position: relative; overflow: hidden;
+}
+.motives::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse at 20% 50%, rgba(200,75,31,0.15) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 50%, rgba(200,146,42,0.08) 0%, transparent 60%);
+}
+.motives-head { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; margin-bottom: 16px; position: relative; }
+.motives-title-row { display: flex; align-items: center; gap: 14px; }
+.motives-title { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 2px; color: #fff; line-height: 1; }
+.rec-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--accent); color: #fff; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; padding: 5px 10px; border-radius: 4px; position: relative; top: -2px; }
+.rec-dot { width: 8px; height: 8px; background: #fff; border-radius: 50%; animation: recpulse 1.2s ease infinite; }
+.motives-tags { display: flex; gap: 6px; }
+.motives-tag { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.35); padding: 3px 8px; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; }
+.motives-scroll-wrap { position: relative; }
+.motives-scroll-wrap::after { content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 80px; background: linear-gradient(to right, transparent, var(--bg-mid)); pointer-events: none; z-index: 2; }
+.motives-track { display: flex; gap: 14px; padding: 4px 24px 8px; overflow-x: auto; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+.motives-track::-webkit-scrollbar { display: none; }
 
-  #map-tooltip{position:fixed;pointer-events:none;z-index:200;background:var(--bg-dark);border:1px solid rgba(255,255,255,0.15);color:#fff;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;padding:6px 12px;border-radius:var(--radius-sm);white-space:nowrap;display:none;box-shadow:var(--shadow-lg);}
-  .map-selected-info{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:10px;min-height:28px;padding-bottom:8px;}
-  .map-selected-tag{display:inline-flex;align-items:center;gap:5px;background:var(--accent-red);color:#fff;font-size:11px;font-weight:600;padding:3px 10px 3px 8px;border-radius:40px;cursor:pointer;border:none;font-family:inherit;transition:var(--transition);}
-  .map-selected-tag:hover{background:#c8213a;}
-  .map-clear-all{font-size:12px;color:rgba(255,255,255,0.4);cursor:pointer;text-decoration:underline;background:none;border:none;font-family:inherit;}
-  .map-clear-all:hover{color:rgba(255,255,255,0.8);}
+/* ── MOTIVE CARD ── */
+.motive-card {
+  flex-shrink: 0; width: 260px;
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.09);
+  border-radius: var(--r-md); overflow: hidden; cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), border-color var(--ease), box-shadow var(--ease), width 0.25s ease;
+  display: flex; flex-direction: column;
+}
+.motive-card:hover { transform: scale(1.04) translateY(-4px); border-color: rgba(255,255,255,0.25); box-shadow: 0 16px 48px rgba(0,0,0,0.5); width: 300px; z-index: 10; position: relative; }
+.motive-stripe { height: 3px; transition: height var(--ease); }
+.motive-card:hover .motive-stripe { height: 5px; }
+.motive-body { padding: 14px 14px 10px; display: flex; flex-direction: column; gap: 8px; }
+.motive-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.motive-title { font-size: 13px; font-weight: 700; color: #fff; line-height: 1.3; flex: 1; }
+.motive-avail { flex-shrink: 0; display: inline-flex; align-items: center; gap: 3px; font-size: 9px; font-weight: 700; font-family: 'DM Mono', monospace; padding: 2px 7px; border-radius: 40px; text-transform: uppercase; letter-spacing: 0.5px; }
+.motive-avail.available { background: rgba(22,163,74,0.2); color: #4ade80; }
+.motive-avail.fast { background: rgba(245,158,11,0.2); color: #fbbf24; }
+.motive-avail.free { background: rgba(0,194,168,0.2); color: #2dd4bf; }
+.motive-avail-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+.motive-meta { display: flex; flex-direction: column; gap: 4px; }
+.motive-meta-row { display: flex; align-items: center; gap: 5px; font-size: 11px; color: rgba(255,255,255,0.5); }
+.motive-cat { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 40px; display: inline-block; margin-top: 4px; }
+.motive-expand { max-height: 0; overflow: hidden; transition: max-height 0.3s ease, opacity 0.2s ease; opacity: 0; background: rgba(0,0,0,0.3); border-top: 1px solid rgba(255,255,255,0.06); }
+.motive-card:hover .motive-expand { max-height: 220px; opacity: 1; }
+.motive-expand-inner { padding: 12px 14px; display: flex; flex-direction: column; gap: 9px; }
+.motive-expand-row { display: flex; flex-direction: column; gap: 2px; }
+.motive-expand-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.3); }
+.motive-expand-val { font-size: 11px; color: rgba(255,255,255,0.75); line-height: 1.4; }
+.motive-footer { padding: 10px 14px; border-top: 1px solid rgba(255,255,255,0.07); display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.motive-price { font-family: 'DM Mono', monospace; font-size: 15px; font-weight: 500; color: #fff; }
+.motive-price.free { color: #2dd4bf; }
+.motive-cta { font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 700; padding: 6px 14px; border-radius: 40px; border: none; cursor: pointer; transition: var(--ease); text-decoration: none; display: inline-block; white-space: nowrap; }
+.motive-cta.available { background: var(--accent); color: #fff; }
+.motive-cta.fast { background: var(--avail-amber); color: #fff; }
+.motive-cta.free { background: var(--avail-teal); color: #fff; }
 
-  /* FILTER PANEL */
-  .filter-panel{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius-lg);padding:22px;display:flex;flex-direction:column;gap:20px;}
-  .filter-section-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:8px;}
-  .filter-pills{display:flex;flex-wrap:wrap;gap:6px;}
-  .pill{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;padding:6px 14px;border-radius:40px;border:1.5px solid rgba(255,255,255,0.15);background:transparent;color:rgba(255,255,255,0.6);cursor:pointer;transition:var(--transition);white-space:nowrap;}
-  .pill:hover{border-color:rgba(255,255,255,0.4);color:#fff;}
-  .pill.active{background:var(--pill-color,var(--accent-red));border-color:var(--pill-color,var(--accent-red));color:#fff;}
-  .filter-select{width:100%;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.12);border-radius:var(--radius-sm);padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:13px;color:rgba(255,255,255,0.8);outline:none;cursor:pointer;transition:var(--transition);}
-  .filter-select:focus{border-color:var(--accent-yellow);}
-  .filter-select option{background:#1a1a1a;color:#fff;}
-  .price-range{display:flex;flex-direction:column;gap:8px;}
-  .price-range input[type=range]{width:100%;accent-color:var(--accent-yellow);}
-  .price-range-labels{display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,0.4);font-family:'DM Mono',monospace;}
-  .price-current{font-family:'DM Mono',monospace;font-size:14px;color:var(--accent-yellow);font-weight:500;}
+/* ── HERO ── */
+.hero { background: var(--navy); padding: 32px 24px 0; }
+.hero-top { max-width: 1200px; margin: 0 auto 24px; display: flex; flex-direction: column; gap: 10px; }
+.hero-headline { font-family: 'Bebas Neue', sans-serif; font-size: clamp(40px,6vw,80px); line-height: 0.9; color: #fff; letter-spacing: 2px; animation: fadeUp 0.6s ease both; }
+.hero-headline em { color: var(--gold); font-style: normal; }
+.hero-sub { display: flex; align-items: center; gap: 16px; font-size: 14px; color: rgba(255,255,255,0.45); }
+.live-dot { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-family: 'DM Mono', monospace; color: var(--gold); letter-spacing: 1px; white-space: nowrap; }
+.live-dot::before { content: ''; width: 7px; height: 7px; background: var(--gold); border-radius: 50%; animation: pulse 2s ease infinite; }
+.hero-body { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 55fr 45fr; gap: 28px; align-items: start; }
+.map-label { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 10px; }
 
-  /* RESULTS BAR */
-  .results-bar{background:var(--bg);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:var(--nav-h);z-index:90;}
-  .results-count{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;}
-  .results-count span{color:var(--accent-red);}
-  .results-sort{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-secondary);}
-  .results-sort select{font-family:'DM Sans',sans-serif;font-size:13px;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:6px 10px;background:var(--bg-card);color:var(--text-primary);outline:none;cursor:pointer;}
-  .filter-mobile-btn{display:none;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:8px 14px;border:1.5px solid var(--border);border-radius:40px;background:var(--bg-card);color:var(--text-primary);cursor:pointer;}
+/* ── MAP ── */
+#london-map { width: 100%; height: auto; cursor: pointer; background: #1a4a72; border-radius: var(--r-md); display: block; }
+#london-map .borough { fill: #152030; stroke: rgba(255,255,255,0.18); stroke-width: 0.6; transition: fill 0.15s ease; }
+#london-map .borough:hover { fill: rgba(200,75,31,0.45); }
+#london-map .borough.selected { fill: var(--accent); stroke: var(--yellow); stroke-width: 1.2; }
+#london-map .borough-label { font-family: 'DM Sans', sans-serif; font-size: 6.5px; fill: rgba(255,255,255,0.5); pointer-events: none; font-weight: 600; }
+#map-tooltip { position: fixed; pointer-events: none; z-index: 200; background: var(--bg-dark); border: 1px solid rgba(255,255,255,0.15); color: #fff; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: var(--r-sm); white-space: nowrap; display: none; box-shadow: var(--shadow-lg); }
+.map-selected-info { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 10px; min-height: 28px; padding-bottom: 8px; }
+.map-selected-tag { display: inline-flex; align-items: center; gap: 5px; background: var(--accent); color: #fff; font-size: 11px; font-weight: 600; padding: 3px 10px 3px 8px; border-radius: 40px; cursor: pointer; border: none; font-family: inherit; transition: var(--ease); }
+.map-selected-tag:hover { background: var(--accent-deep); }
+.map-clear { font-size: 12px; color: rgba(255,255,255,0.4); cursor: pointer; text-decoration: underline; background: none; border: none; font-family: inherit; }
 
-  /* EVENTS GRID */
-  .events-section{max-width:1200px;margin:0 auto;padding:32px 24px 64px;}
-  .events-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
-  .event-card{background:var(--bg-card);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-sm);border:1px solid var(--border);transition:transform var(--transition),box-shadow var(--transition);display:flex;flex-direction:column;animation:cardIn 0.4s ease both;}
-  .event-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-xl);}
-  .event-card.sold-out{opacity:0.55;}
-  .event-card.sold-out:hover{transform:none;box-shadow:var(--shadow-sm);}
-  .card-image{width:100%;height:180px;object-fit:cover;display:block;background:#E8E8E0;}
-  .card-image-placeholder{width:100%;height:180px;display:flex;align-items:center;justify-content:center;font-size:52px;}
-  .card-cat-stripe{height:4px;background:var(--cat-color,var(--accent-red));}
-  .card-body{padding:16px;flex:1;display:flex;flex-direction:column;gap:10px;}
-  .card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
-  .card-title{font-size:15px;font-weight:700;line-height:1.3;color:var(--text-primary);flex:1;}
-  .avail-badge{flex-shrink:0;display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;font-family:'DM Mono',monospace;padding:3px 8px;border-radius:40px;letter-spacing:0.5px;text-transform:uppercase;}
-  .avail-badge.available{background:#DCFCE7;color:var(--avail-available);}
-  .avail-badge.fast{background:#FEF3C7;color:var(--avail-fast);}
-  .avail-badge.sold-out{background:#F3F4F6;color:var(--avail-soldout);}
-  .avail-badge.free{background:#CCFBF1;color:var(--avail-free);}
-  .avail-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0;}
-  .card-meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;}
-  .card-meta-item{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--text-secondary);}
-  .cat-pill{font-size:11px;font-weight:700;padding:2px 8px;border-radius:40px;background:var(--cat-color,var(--accent-red));color:#fff;letter-spacing:0.3px;}
-  .card-price{font-family:'DM Mono',monospace;font-size:16px;font-weight:500;color:var(--text-primary);}
-  .card-price.free-price{color:var(--avail-free);}
-  .card-review{background:var(--bg);border-radius:var(--radius-sm);padding:10px 12px;font-size:12px;color:var(--text-secondary);line-height:1.5;border-left:3px solid var(--cat-color,var(--accent-red));}
-  .card-review-label{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px;font-family:'DM Mono',monospace;}
-  .card-footer{padding:12px 16px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:8px;}
-  .card-cta{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:8px 18px;border-radius:40px;border:none;cursor:pointer;transition:var(--transition);text-decoration:none;display:inline-block;}
-  .card-cta.available{background:var(--accent-red);color:#fff;}
-  .card-cta.available:hover{background:#c8213a;}
-  .card-cta.fast{background:var(--avail-fast);color:#fff;}
-  .card-cta.fast:hover{background:#d97706;}
-  .card-cta.free{background:var(--avail-free);color:#fff;}
-  .card-cta.free:hover{background:#00a090;}
-  .card-cta.sold-out{background:#E5E7EB;color:var(--avail-soldout);cursor:not-allowed;}
-  .card-source{font-size:10px;font-family:'DM Mono',monospace;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;}
-  .loading-state{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 24px;gap:16px;color:var(--text-muted);}
-  .spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--accent-red);border-radius:50%;animation:spin 0.8s linear infinite;}
-  .empty-state{grid-column:1/-1;text-align:center;padding:80px 24px;color:var(--text-muted);}
-  .empty-state h3{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:1px;margin-bottom:8px;color:var(--text-secondary);}
+/* ── FILTER PANEL ── */
+.filter-panel { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); border-radius: var(--r-lg); padding: 22px; display: flex; flex-direction: column; gap: 20px; }
+.filter-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 8px; }
+.pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.pill { font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 40px; border: 1.5px solid rgba(255,255,255,0.15); background: transparent; color: rgba(255,255,255,0.6); cursor: pointer; transition: var(--ease); white-space: nowrap; }
+.pill:hover { border-color: rgba(255,255,255,0.4); color: #fff; }
+.pill.active { background: var(--pill-color, var(--red)); border-color: var(--pill-color, var(--red)); color: #fff; }
+.filter-select { width: 100%; background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.12); border-radius: var(--r-sm); padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: rgba(255,255,255,0.8); outline: none; cursor: pointer; transition: var(--ease); }
+.filter-select:focus { border-color: var(--gold); }
+.filter-select option { background: #1a1a1a; color: #fff; }
+.price-slider { display: flex; flex-direction: column; gap: 8px; }
+.price-slider input[type=range] { width: 100%; accent-color: var(--gold); }
+.price-slider-labels { display: flex; justify-content: space-between; font-size: 11px; color: rgba(255,255,255,0.4); font-family: 'DM Mono', monospace; }
+.price-val { font-family: 'DM Mono', monospace; font-size: 14px; color: var(--gold); font-weight: 500; }
 
-  /* MODAL */
-  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;align-items:center;justify-content:center;padding:24px;}
-  .modal-overlay.open{display:flex;}
-  .modal{background:var(--bg-card);border-radius:var(--radius-xl);padding:32px;max-width:520px;width:100%;box-shadow:var(--shadow-xl);}
-  .modal h2{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;margin-bottom:6px;}
-  .modal p{font-size:14px;color:var(--text-secondary);margin-bottom:24px;line-height:1.6;}
-  .modal-field{margin-bottom:16px;}
-  .modal-field label{display:block;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-secondary);margin-bottom:6px;font-family:'DM Mono',monospace;}
-  .modal-field input{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Mono',monospace;font-size:13px;color:var(--text-primary);background:var(--bg);outline:none;transition:var(--transition);}
-  .modal-field input:focus{border-color:var(--accent-red);}
-  .modal-field .hint{font-size:11px;color:var(--text-muted);margin-top:4px;}
-  .modal-field .hint a{color:var(--accent-blue);}
-  .modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:24px;}
-  .btn-primary{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;padding:10px 24px;background:var(--accent-red);color:#fff;border:none;border-radius:40px;cursor:pointer;transition:var(--transition);}
-  .btn-primary:hover{background:#c8213a;}
-  .btn-secondary{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;padding:10px 20px;background:transparent;color:var(--text-secondary);border:1.5px solid var(--border);border-radius:40px;cursor:pointer;transition:var(--transition);}
-  .btn-secondary:hover{border-color:var(--text-secondary);color:var(--text-primary);}
-  .mobile-filter-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:150;}
-  .mobile-filter-overlay.open{display:block;}
-  .mobile-filter-drawer{position:fixed;bottom:0;left:0;right:0;background:var(--bg-dark);border-radius:var(--radius-xl) var(--radius-xl) 0 0;padding:24px;z-index:151;transform:translateY(100%);transition:transform 0.3s cubic-bezier(0.4,0,0.2,1);max-height:80vh;overflow-y:auto;}
-  .mobile-filter-drawer.open{transform:translateY(0);}
-  .drawer-handle{width:40px;height:4px;background:rgba(255,255,255,0.2);border-radius:2px;margin:0 auto 20px;}
-  .toast{position:fixed;bottom:24px;right:24px;background:var(--bg-dark);color:#fff;padding:12px 20px;border-radius:var(--radius-md);font-size:13px;font-weight:500;box-shadow:var(--shadow-xl);z-index:300;transform:translateY(20px);opacity:0;transition:all 0.3s ease;}
-  .toast.show{transform:translateY(0);opacity:1;}
-  .live-dot{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-family:'DM Mono',monospace;color:var(--accent-teal);letter-spacing:1px;}
-  .live-dot::before{content:'';width:7px;height:7px;background:var(--accent-teal);border-radius:50%;animation:pulse 2s ease infinite;}
+/* ── RESULTS BAR ── */
+.results-bar { background: var(--bg); border-bottom: 1px solid var(--border); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; position: sticky; top: var(--nav-h); z-index: 90; }
+.results-count { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 1px; }
+.results-count span { color: var(--accent); }
+.results-right { display: flex; align-items: center; gap: 12px; }
+.sort-row { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-secondary); }
+.sort-row select { font-family: 'DM Sans', sans-serif; font-size: 13px; border: 1.5px solid var(--border); border-radius: var(--r-sm); padding: 6px 10px; background: var(--bg-card); color: var(--text-primary); outline: none; cursor: pointer; }
+.filter-mob-btn { display: none; align-items: center; gap: 6px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; padding: 8px 14px; border: 1.5px solid var(--border); border-radius: 40px; background: var(--bg-card); color: var(--text-primary); cursor: pointer; }
 
-  @keyframes spin{to{transform:rotate(360deg);}}
-  @keyframes cardIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
-  @keyframes headlineIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
-  @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(0.8);}}
+/* ── EVENT CARDS ── */
+.events-wrap { max-width: 1200px; margin: 0 auto; padding: 32px 24px 64px; }
+.events-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+.event-card { background: var(--bg-card); border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--shadow-sm); border: 1px solid var(--border); transition: transform var(--ease), box-shadow var(--ease); display: flex; flex-direction: column; animation: fadeUp 0.4s ease both; }
+.event-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-xl); }
+.event-card.sold-out { opacity: 0.55; }
+.event-card.sold-out:hover { transform: none; box-shadow: var(--shadow-sm); }
+.card-img { width: 100%; height: 180px; object-fit: cover; display: block; }
+.card-placeholder { width: 100%; height: 180px; display: flex; align-items: center; justify-content: center; font-size: 52px; }
+.card-stripe { height: 4px; }
+.card-body { padding: 16px; flex: 1; display: flex; flex-direction: column; gap: 10px; }
+.card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.card-title { font-size: 15px; font-weight: 700; line-height: 1.3; color: var(--text-primary); flex: 1; }
+.avail-badge { flex-shrink: 0; display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 700; font-family: 'DM Mono', monospace; padding: 3px 8px; border-radius: 40px; letter-spacing: 0.5px; text-transform: uppercase; }
+.avail-badge.available { background: #DCFCE7; color: var(--avail-green); }
+.avail-badge.fast { background: #FEF3C7; color: var(--avail-amber); }
+.avail-badge.sold-out { background: #F3F4F6; color: var(--avail-grey); }
+.avail-badge.free { background: #D1F0EB; color: var(--avail-teal); }
+.avail-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+.card-meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.card-meta-item { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--text-secondary); }
+.cat-pill { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 40px; color: #fff; }
+.card-price { font-family: 'DM Mono', monospace; font-size: 16px; font-weight: 500; color: var(--text-primary); }
+.card-price.free { color: var(--avail-teal); }
+.card-review { background: var(--bg); border-radius: var(--r-sm); padding: 10px 12px; font-size: 12px; color: var(--text-secondary); line-height: 1.5; border-left: 3px solid currentColor; }
+.card-review-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; font-family: 'DM Mono', monospace; }
+.card-footer { padding: 12px 16px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.card-cta { font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 700; padding: 8px 18px; border-radius: 40px; border: none; cursor: pointer; transition: var(--ease); text-decoration: none; display: inline-block; }
+.card-cta.available { background: var(--accent); color: #fff; }
+.card-cta.available:hover { background: var(--accent-deep); }
+.card-cta.fast { background: var(--avail-amber); color: #fff; }
+.card-cta.free { background: var(--avail-teal); color: #fff; }
+.card-cta.sold-out { background: #E5E7EB; color: var(--avail-grey); cursor: not-allowed; }
+.card-source { font-size: 10px; font-family: 'DM Mono', monospace; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
 
-  @media(max-width:900px){
-    .hero{padding:24px 16px 0;}
-    .hero-top{flex-direction:column;align-items:flex-start;gap:8px;}
-    .hero-sub{text-align:left;max-width:100%;}
-    .hero-body{grid-template-columns:1fr;}
-    .filter-panel{display:none;}
-    .events-grid{grid-template-columns:repeat(2,1fr);}
-    .results-bar{flex-wrap:wrap;}
-    .filter-mobile-btn{display:flex;}
-    .nav-search{max-width:none;}
-    .hamburger{display:flex;}
-    #london-map .borough-label{font-size:5px;}
-    .motives-title{font-size:24px;}
-    .motives-tags{display:none;}
-  }
-  @media(max-width:540px){.events-grid{grid-template-columns:1fr;}nav{padding:0 16px;}}
+/* ── STATES ── */
+.loading-state { grid-column: 1/-1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 24px; gap: 16px; color: var(--text-muted); }
+.spinner { width: 40px; height: 40px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
+.empty-state { grid-column: 1/-1; text-align: center; padding: 80px 24px; color: var(--text-muted); }
+.empty-state h3 { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 1px; margin-bottom: 8px; }
 
-  /* SEARCH DROPDOWN */
-  .search-dropdown {
-    position: absolute;
-    top: calc(100% + 8px);
-    left: 0; right: 0;
-    background: #1a1a1a;
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    z-index: 999;
-    box-shadow: var(--shadow-xl);
-    display: none;
-    max-height: 400px;
-    overflow-y: auto;
-  }
-  .search-dropdown.open { display: block; }
-  .search-dropdown-header {
-    padding: 8px 14px;
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.3);
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-  }
-  .search-result-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 14px;
-    cursor: pointer;
-    transition: background var(--transition);
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-  }
-  .search-result-item:last-child { border-bottom: none; }
-  .search-result-item:hover { background: rgba(255,255,255,0.06); }
-  .search-result-cat {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-  .search-result-info { flex: 1; min-width: 0; }
-  .search-result-title {
-    font-size: 13px;
-    font-weight: 600;
-    color: #fff;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .search-result-title mark {
-    background: rgba(255,217,61,0.3);
-    color: var(--accent-yellow);
-    border-radius: 2px;
-    padding: 0 1px;
-  }
-  .search-result-sub {
-    font-size: 11px;
-    color: rgba(255,255,255,0.4);
-    margin-top: 1px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .search-result-price {
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    font-weight: 500;
-    color: rgba(255,255,255,0.6);
-    flex-shrink: 0;
-  }
-  .search-result-price.free { color: var(--avail-free); }
-  .search-no-results {
-    padding: 20px 14px;
-    text-align: center;
-    font-size: 13px;
-    color: rgba(255,255,255,0.35);
-    font-family: 'DM Mono', monospace;
-  }
-  .search-no-results span {
-    display: block;
-    font-size: 11px;
-    margin-top: 4px;
-    color: rgba(255,255,255,0.2);
-  }
+/* ── MODAL ── */
+.modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 200; align-items: center; justify-content: center; padding: 24px; }
+.modal-bg.open { display: flex; }
+.modal { background: var(--bg-card); border-radius: var(--r-xl); padding: 32px; max-width: 520px; width: 100%; box-shadow: var(--shadow-xl); }
+.modal h2 { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 1px; margin-bottom: 6px; }
+.modal p { font-size: 14px; color: var(--text-secondary); margin-bottom: 24px; line-height: 1.6; }
+.modal-field { margin-bottom: 16px; }
+.modal-field label { display: block; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 6px; font-family: 'DM Mono', monospace; }
+.modal-field input { width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--r-sm); font-family: 'DM Mono', monospace; font-size: 13px; color: var(--text-primary); background: var(--bg); outline: none; transition: var(--ease); }
+.modal-field input:focus { border-color: var(--accent); }
+.modal-field .hint { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+.modal-field .hint a { color: var(--blue); }
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 24px; }
+.btn { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 700; padding: 10px 24px; border-radius: 40px; border: none; cursor: pointer; transition: var(--ease); }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent-deep); }
+.btn-secondary { background: transparent; color: var(--text-secondary); border: 1.5px solid var(--border); font-weight: 600; }
+.btn-secondary:hover { border-color: var(--text-secondary); color: var(--text-primary); }
+
+/* ── MOBILE DRAWER ── */
+.drawer-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 150; }
+.drawer-bg.open { display: block; }
+.drawer { position: fixed; bottom: 0; left: 0; right: 0; background: var(--navy); border-radius: var(--r-xl) var(--r-xl) 0 0; padding: 24px; z-index: 151; transform: translateY(100%); transition: transform 0.3s ease; max-height: 80vh; overflow-y: auto; }
+.drawer.open { transform: translateY(0); }
+.drawer-handle { width: 40px; height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px; margin: 0 auto 20px; }
+
+/* ── TOAST ── */
+.toast { position: fixed; bottom: 24px; right: 24px; background: var(--bg-dark); color: #fff; padding: 12px 20px; border-radius: var(--r-md); font-size: 13px; font-weight: 500; box-shadow: var(--shadow-xl); z-index: 300; transform: translateY(20px); opacity: 0; transition: all 0.3s ease; }
+.toast.show { transform: translateY(0); opacity: 1; }
+
+/* ── ANIMATIONS ── */
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.8); } }
+@keyframes recpulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .hero { padding: 24px 16px 0; }
+  .hero-body { grid-template-columns: 1fr; }
+  .filter-panel { display: none; }
+  .events-grid { grid-template-columns: repeat(2,1fr); }
+  .results-bar { flex-wrap: wrap; }
+  .filter-mob-btn { display: flex; }
+  .nav-search { max-width: none; }
+  .hamburger { display: flex; }
+  .motives-title { font-size: 24px; }
+  .motives-tags { display: none; }
+  #london-map .borough-label { font-size: 5px; }
+}
+@media (max-width: 540px) {
+  .events-grid { grid-template-columns: 1fr; }
+  nav { padding: 0 16px; }
+}
 </style>
 </head>
 <body>
 
+<!-- NAV -->
 <nav>
   <div class="nav-logo">LONDON<span>LIVE</span></div>
   <div class="nav-search">
-    <svg class="nav-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
     <input type="text" id="search-input" placeholder="Search events, artists, venues..." autocomplete="off">
     <div class="search-dropdown" id="search-dropdown"></div>
   </div>
-  <div class="nav-right">
-    <button class="api-btn" id="api-config-btn" onclick="openApiModal()">&#9881; Configure APIs</button>
-    <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  <div style="display:flex;align-items:center;gap:12px">
+    <button class="api-btn" id="api-btn" onclick="openModal()">&#9881; Configure APIs</button>
+    <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
   </div>
 </nav>
 
 <!-- MOTIVES BANNER -->
-<div class="motives-banner">
-  <div class="motives-header">
-    <div class="motives-title-group">
+<div class="motives">
+  <div class="motives-head">
+    <div class="motives-title-row">
       <div class="motives-title">THIS WEEKEND'S MOTIVES</div>
-      <div class="rec-badge"><span class="rec-dot"></span>REC</div>
+      <div class="rec-badge"><span class="rec-dot"></span>LIVE</div>
     </div>
     <div class="motives-tags">
       <span class="motives-tag">dance</span>
@@ -372,23 +347,26 @@
   </div>
   <div class="motives-scroll-wrap">
     <div class="motives-track" id="motives-track">
-      <div style="display:flex;align-items:center;gap:10px;padding:20px;color:rgba(255,255,255,0.3);font-size:13px;font-family:'DM Mono',monospace;">
-        <div class="spinner" style="width:20px;height:20px;border-width:2px;border-color:rgba(255,255,255,0.1);border-top-color:var(--accent-red)"></div>
+      <div style="display:flex;align-items:center;gap:10px;padding:20px;color:rgba(255,255,255,0.3);font-size:13px;font-family:'DM Mono',monospace">
+        <div class="spinner" style="width:20px;height:20px;border-width:2px;border-color:rgba(255,255,255,0.1);border-top-color:var(--accent)"></div>
         Loading motives...
       </div>
     </div>
   </div>
 </div>
 
-<!-- HERO -->
+<!-- HERO + MAP -->
 <section class="hero">
   <div class="hero-top">
     <h1 class="hero-headline">WHAT'S ON<br>IN <em>LONDON</em></h1>
-    <div class="hero-sub"><div class="live-dot">LIVE EVENTS</div><span>Click any borough to filter &mdash; multi-select supported.</span></div>
+    <div class="hero-sub">
+      <div class="live-dot">LIVE EVENTS</div>
+      <span>Click any borough to filter &mdash; multi-select supported.</span>
+    </div>
   </div>
   <div class="hero-body">
-    <div class="map-container">
-      <div class="map-label">&#8595; London Boroughs &#8212; click to filter</div>
+    <div>
+      <div class="map-label">&#8595; London Boroughs &mdash; click to filter</div>
       <svg id="london-map" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
 <path class="borough" id="b_city_of_london" data-borough="City of London" d="M392.1,252.4 L392.4,253.1 L393.7,252.6 L394.4,254.9 L396.0,254.9 L396.2,255.6 L398.6,256.0 L398.3,257.1 L401.7,258.7 L402.7,256.6 L404.4,257.3 L405.8,256.0 L406.5,254.3 L408.8,254.9 L407.9,258.6 L409.2,258.5 L409.1,259.2 L410.3,261.7 L412.9,264.8 L413.7,268.5 L414.0,269.9 L413.8,270.9 L411.4,271.4 L410.8,270.3 L409.4,270.9 L408.4,271.9 L408.2,272.4 L408.6,272.7 L408.0,274.1 L407.0,273.8 L406.0,273.3 L402.4,273.0 L399.5,272.5 L396.5,271.9 L393.5,270.9 L393.6,270.3 L392.7,270.7 L389.3,270.0 L381.5,269.9 L378.7,270.0 L378.7,268.7 L377.9,267.2 L378.5,266.6 L378.3,265.9 L379.1,265.7 L378.7,263.6 L376.6,259.5 L382.1,260.2 L384.4,259.1 L387.6,257.5 L388.9,256.8 L391.3,256.0 L391.4,255.6 L391.6,254.8 L391.1,253.0 L392.1,252.4Z"/>
 <text class="borough-label" data-borough="City of London" x="397.1" y="263.2" text-anchor="middle" dominant-baseline="middle">City</text>
@@ -456,15 +434,13 @@
 <text class="borough-label" data-borough="Wandsworth" x="316.7" y="348.9" text-anchor="middle" dominant-baseline="middle">Wandsworth</text>
 <path class="borough" id="b_westminster" data-borough="Westminster" d="M321.8,231.5 L322.4,232.3 L323.7,231.3 L324.7,232.1 L326.0,230.9 L330.1,234.9 L334.2,232.8 L335.2,234.1 L341.3,232.5 L346.3,250.0 L347.5,249.6 L348.1,251.4 L349.1,251.4 L349.0,250.5 L349.7,250.5 L349.6,251.5 L350.2,251.6 L353.6,255.9 L355.5,258.6 L356.2,258.2 L356.6,258.9 L357.1,258.5 L358.2,260.4 L358.6,260.2 L359.6,261.0 L359.7,261.6 L361.2,261.1 L361.6,262.0 L362.1,264.8 L362.5,266.2 L362.8,266.2 L364.3,267.3 L368.4,263.8 L369.1,264.6 L369.4,264.2 L371.5,264.7 L375.8,262.6 L376.6,264.3 L378.7,263.6 L379.1,265.7 L378.3,265.9 L378.5,266.6 L377.9,267.2 L378.7,268.7 L378.7,270.0 L375.5,270.4 L372.5,271.7 L371.1,272.8 L369.8,274.7 L368.2,279.4 L366.8,292.5 L366.1,296.8 L363.3,301.6 L359.5,305.1 L354.5,306.4 L352.5,306.3 L347.8,305.2 L344.7,305.3 L344.5,304.4 L344.0,304.6 L344.4,305.4 L343.7,305.4 L343.4,304.4 L338.4,299.6 L339.0,299.0 L338.6,297.6 L338.4,297.1 L339.4,296.3 L338.3,294.6 L339.2,293.7 L338.3,292.8 L338.9,292.0 L338.2,288.6 L336.6,286.4 L336.0,281.9 L333.7,282.8 L332.3,284.7 L329.6,286.9 L329.4,286.1 L327.7,287.5 L327.0,286.4 L322.3,287.6 L316.8,288.2 L316.1,283.0 L312.6,282.6 L309.2,270.8 L305.4,271.2 L304.6,268.5 L303.7,268.6 L303.4,267.2 L302.7,264.0 L299.0,264.7 L298.3,261.4 L297.6,259.9 L296.9,260.1 L294.8,256.2 L295.8,255.8 L297.7,256.0 L296.8,253.2 L294.7,252.2 L292.9,249.0 L291.6,248.3 L286.7,247.4 L284.1,247.6 L283.7,245.9 L283.8,243.4 L284.5,242.6 L284.4,241.1 L288.2,240.3 L291.3,239.0 L295.5,238.9 L295.5,238.9 L296.7,239.4 L297.3,240.3 L299.8,242.4 L300.3,245.9 L301.0,245.9 L301.4,246.3 L305.0,239.3 L305.2,238.4 L304.6,237.4 L306.0,234.2 L308.5,236.7 L309.4,235.9 L312.9,231.3 L316.3,229.6 L317.9,229.3 L322.0,229.7 L321.8,231.5Z"/>
 <text class="borough-label" data-borough="Westminster" x="332.9" y="263.9" text-anchor="middle" dominant-baseline="middle">Westminster</text>
-
-
       </svg>
       <div class="map-selected-info" id="map-selected-info"></div>
     </div>
-    <div class="filter-panel" id="filter-panel">
+    <div class="filter-panel">
       <div>
-        <div class="filter-section-label">Event Type</div>
-        <div class="filter-pills" id="type-filters">
+        <div class="filter-label">Event Type</div>
+        <div class="pills" id="type-pills">
           <button class="pill active" style="--pill-color:#555" data-type="all">All</button>
           <button class="pill" style="--pill-color:var(--cat-music)" data-type="music">&#127925; Music</button>
           <button class="pill" style="--pill-color:var(--cat-sport)" data-type="sports">&#9917; Sport</button>
@@ -477,7 +453,7 @@
         </div>
       </div>
       <div>
-        <div class="filter-section-label">Date</div>
+        <div class="filter-label">Date</div>
         <select class="filter-select" id="date-filter">
           <option value="all">Any time</option>
           <option value="today">Today</option>
@@ -487,15 +463,15 @@
         </select>
       </div>
       <div>
-        <div class="filter-section-label">Max Price</div>
-        <div class="price-range">
-          <div class="price-current" id="price-display">Any price</div>
-          <input type="range" id="price-filter" min="0" max="200" value="200" step="5">
-          <div class="price-range-labels"><span>Free</span><span>&#163;200+</span></div>
+        <div class="filter-label">Max Price</div>
+        <div class="price-slider">
+          <div class="price-val" id="price-val">Any price</div>
+          <input type="range" id="price-range" min="0" max="200" value="200" step="5">
+          <div class="price-slider-labels"><span>Free</span><span>&#163;200+</span></div>
         </div>
       </div>
       <div>
-        <div class="filter-section-label">Availability</div>
+        <div class="filter-label">Availability</div>
         <select class="filter-select" id="avail-filter">
           <option value="all">All events</option>
           <option value="available">Available only</option>
@@ -506,14 +482,15 @@
   </div>
 </section>
 
+<!-- RESULTS BAR -->
 <div class="results-bar">
-  <div class="results-count" id="results-count">LOADING EVENTS...</div>
-  <div style="display:flex;align-items:center;gap:12px">
-    <button class="filter-mobile-btn" onclick="openMobileFilters()">
+  <div class="results-count" id="results-count">LOADING...</div>
+  <div class="results-right">
+    <button class="filter-mob-btn" onclick="openDrawer()">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="10" y1="18" x2="14" y2="18"/></svg>
       Filters
     </button>
-    <div class="results-sort">
+    <div class="sort-row">
       <span style="font-size:12px;color:var(--text-muted)">Sort:</span>
       <select id="sort-select">
         <option value="date">Date</option>
@@ -525,40 +502,43 @@
   </div>
 </div>
 
-<section class="events-section">
+<!-- EVENTS -->
+<div class="events-wrap">
   <div class="events-grid" id="events-grid">
     <div class="loading-state"><div class="spinner"></div><p>Fetching London events...</p></div>
   </div>
-</section>
+</div>
 
-<div class="modal-overlay" id="api-modal">
+<!-- API MODAL -->
+<div class="modal-bg" id="modal-bg">
   <div class="modal">
     <h2>Configure API Keys</h2>
-    <p>Paste your free API keys below to load live London events. Saved in your browser.</p>
+    <p>Paste your free API keys to load live London events. Saved in your browser.</p>
     <div class="modal-field">
       <label>Ticketmaster API Key</label>
-      <input type="text" id="tm-key" placeholder="Paste your Consumer Key...">
+      <input type="text" id="tm-key" placeholder="Consumer Key...">
       <div class="hint">Free at <a href="https://developer.ticketmaster.com" target="_blank">developer.ticketmaster.com</a></div>
     </div>
     <div class="modal-field">
       <label>Eventbrite Private Token</label>
-      <input type="text" id="eb-key" placeholder="Paste your Private Token...">
+      <input type="text" id="eb-key" placeholder="Private Token...">
       <div class="hint">Free at <a href="https://www.eventbrite.com/platform" target="_blank">eventbrite.com/platform</a></div>
     </div>
     <div class="modal-actions">
-      <button class="btn-secondary" onclick="closeApiModal()">Cancel</button>
-      <button class="btn-primary" onclick="saveApiKeys()">Save &amp; Load Events</button>
+      <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveKeys()">Save &amp; Load Events</button>
     </div>
   </div>
 </div>
 
-<div class="mobile-filter-overlay" id="mobile-overlay" onclick="closeMobileFilters()"></div>
-<div class="mobile-filter-drawer" id="mobile-drawer">
+<!-- MOBILE DRAWER -->
+<div class="drawer-bg" id="drawer-bg" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
   <div class="drawer-handle"></div>
   <div style="display:flex;flex-direction:column;gap:20px">
     <div>
-      <div class="filter-section-label">Event Type</div>
-      <div class="filter-pills" id="type-filters-mobile">
+      <div class="filter-label">Event Type</div>
+      <div class="pills" id="type-pills-mob">
         <button class="pill active" style="--pill-color:#555" data-type="all">All</button>
         <button class="pill" style="--pill-color:var(--cat-music)" data-type="music">Music</button>
         <button class="pill" style="--pill-color:var(--cat-sport)" data-type="sports">Sport</button>
@@ -571,8 +551,8 @@
       </div>
     </div>
     <div>
-      <div class="filter-section-label">Date</div>
-      <select class="filter-select" id="date-filter-mobile">
+      <div class="filter-label">Date</div>
+      <select class="filter-select" id="date-filter-mob">
         <option value="all">Any time</option>
         <option value="today">Today</option>
         <option value="weekend">This Weekend</option>
@@ -581,10 +561,10 @@
       </select>
     </div>
     <div>
-      <div class="filter-section-label">Max Price: <span id="price-display-mobile" class="price-current">Any</span></div>
-      <input type="range" id="price-filter-mobile" min="0" max="200" value="200" step="5" style="width:100%;accent-color:var(--accent-yellow)">
+      <div class="filter-label">Max Price: <span id="price-val-mob" class="price-val">Any</span></div>
+      <input type="range" id="price-range-mob" min="0" max="200" value="200" step="5" style="width:100%;accent-color:var(--yellow)">
     </div>
-    <button class="btn-primary" style="width:100%" onclick="closeMobileFilters()">Apply Filters</button>
+    <button class="btn btn-primary" style="width:100%" onclick="closeDrawer()">Apply Filters</button>
   </div>
 </div>
 
@@ -592,407 +572,462 @@
 <div class="toast" id="toast"></div>
 
 <script>
-const state = {
+// ── STATE ──
+const S = {
   events: [], filtered: [],
-  selectedBoroughs: new Set(),
-  activeType: 'all', dateFilter: 'all',
-  maxPrice: 200, availFilter: 'all',
-  searchQuery: '', sortBy: 'date'
+  boroughs: new Set(),
+  type: 'all', date: 'all',
+  maxPrice: 200, avail: 'all',
+  query: '', sort: 'date'
 };
 
-let TM_KEY = localStorage.getItem('ll_tm_key') || '';
-let EB_KEY = localStorage.getItem('ll_eb_key') || '';
+// ── CONFIG ──
+let TM_KEY = localStorage.getItem('ll_tm') || '';
+let EB_KEY = localStorage.getItem('ll_eb') || '';
 
-const CAT_COLORS_RAW = {
-  music:'#E8294A', sports:'#2563EB', arts:'#7C3AED', food:'#FF6B35',
-  family:'#FFD93D', comedy:'#EC4899', festivals:'#00C2A8', science:'#16A34A', other:'#999'
+// ── CONSTANTS ──
+const CAT_COLOR = {
+  music:'#C84B1F', sports:'#2D4A6B', arts:'#6B3FA0', food:'#B85C1A',
+  family:'#C8922A', comedy:'#C2476B', festivals:'#1A7A6B', science:'#1A6B3F', other:'#999'
 };
-const CAT_EMOJIS = {
+const CAT_EMOJI = {
   music:'\u{1F3B5}', sports:'\u26BD', arts:'\u{1F3AD}', food:'\u{1F37D}',
   family:'\u{1F46A}', comedy:'\u{1F602}', festivals:'\u{1F3AA}',
   science:'\u{1F52C}', other:'\u{1F4C5}'
 };
+const MOTIVE_CATS = ['music','festivals','comedy','arts'];
 
+// ── SAMPLE DATA (fallback when no API keys) ──
 function addDays(n) { const d = new Date(); d.setDate(d.getDate() + n); return d; }
 
-// vibe / crowd fields — populated by API when live, written manually for demo
-const SAMPLE_EVENTS = [
-  { id:'s1', title:'The Rolling Stones - Hackney Diamonds Tour', date:addDays(0), venue:'The O2 Arena', borough:'Greenwich', category:'music', price:85, isFree:false, availability:'fast', image:null, source:'ticketmaster', url:'#', review:'The O2 consistently delivers world-class acoustics. Past shows here sell out within hours.',
-    vibe:'Classic rock institution on a stadium scale. Big production, big singalongs, genuine history.', crowd:'Mixed 30s-60s, couples and groups, a few die-hards in vintage tees. Dressed up but not club-dressed.', bestFor:'Groups, date night, bucket list', tip:'Upper tier has better views than you think. Grab a pint before doors close — queues are brutal.' },
-  { id:'s2', title:'London Science Museum: Space Exhibition', date:addDays(2), venue:'Science Museum', borough:'Kensington and Chelsea', category:'science', price:0, isFree:true, availability:'available', image:null, source:'eventbrite', url:'#', review:'Previous exhibitions here regularly attract 200k+ visitors.',
-    vibe:'Immersive space exploration through real artefacts, interactive displays and film. Quietly mind-blowing.', crowd:'Families with kids, curious adults, school groups on weekdays. Relaxed pace.', bestFor:'Families, solo curious types, date afternoon', tip:'Go straight to the top floor first — crowds thin out up there.' },
-  { id:'s3', title:'Chelsea Flower Show 2026', date:addDays(5), venue:'Royal Hospital Chelsea', borough:'Kensington and Chelsea', category:'festivals', price:45, isFree:false, availability:'available', image:null, source:'ticketmaster', url:'#', review:'Rated among the top 5 UK annual events.',
-    vibe:'World-class garden design, floristry and horticulture across sprawling grounds. Surprisingly moving.', crowd:'Largely 40s-60s, well-dressed, garden enthusiasts. Very civilised. Prosecco in hand is standard.', bestFor:'Couples, parents, anyone who appreciates craft', tip:'Wednesday morning is the least crowded. Wear comfortable shoes — it is a full day on your feet.' },
-  { id:'s4', title:'Arsenal vs Chelsea - Premier League', date:addDays(3), venue:'Emirates Stadium', borough:'Islington', category:'sports', price:65, isFree:false, availability:'sold-out', image:null, source:'ticketmaster', url:'#', review:'This fixture sells out every season.',
-    vibe:'North London rivalry at full intensity. Proper atmosphere, proper stakes, proper football.', crowd:'Home and away fans, loyal season ticket holders, genuine passion throughout. Loud from kickoff.', bestFor:'Football fans, group of mates', tip:'Already sold out — check resale sites but expect a premium.' },
-  { id:'s5', title:'Comedy at the Apollo', date:addDays(1), venue:'Hammersmith Apollo', borough:'Hammersmith and Fulham', category:'comedy', price:35, isFree:false, availability:'available', image:null, source:'eventbrite', url:'#', review:'Previous headliners call it their favourite UK venue.',
-    vibe:'Headline stand-up in one of London best rooms. Expect a proper night out, not a gig you drift in and out of.', crowd:'Mixed 20s-40s, groups and couples, everyone there to have a good time. Drinks flowing.', bestFor:'Groups, date night, something different', tip:'Seats in the stalls dress circle hit the sweet spot for sightlines and atmosphere.' },
-  { id:'s6', title:'Borough Market Food Festival', date:addDays(0), venue:'Borough Market', borough:'Southwark', category:'food', price:0, isFree:true, availability:'available', image:null, source:'meetup', url:'#', review:'Legendary events rain or shine.',
-    vibe:'The best of British and international street food, artisan producers, live demos. Graze your way through.', crowd:'Food lovers, locals, tourists who got the memo. Relaxed, unhurried, everyone eating standing up.', bestFor:'Solo, couples, anyone who eats', tip:'Go hungry. Arrive by 11am before the lunch crowd hits. The Portuguese custard tarts are not optional.' },
-  { id:'s7', title:'Tate Modern: New Acquisitions Opening', date:addDays(7), venue:'Tate Modern', borough:'Southwark', category:'arts', price:22, isFree:false, availability:'available', image:null, source:'eventbrite', url:'#', review:'Opening nights attract the creative elite.',
-    vibe:'Private view energy — new work, strong opinions, free wine, and the Turbine Hall doing something unexpected.', crowd:'Arts world, creatives, collectors, plus curious regulars. Conversations start easily. Smart casual dress.', bestFor:'Solo, date night, anyone in the arts scene', tip:'Opening nights have free drinks for the first two hours. Get there early.' },
-  { id:'s8', title:'Family Science Day - Natural History Museum', date:addDays(4), venue:'Natural History Museum', borough:'Kensington and Chelsea', category:'family', price:0, isFree:true, availability:'available', image:null, source:'eventbrite', url:'#', review:'The dinosaur hall is genuinely awe-inspiring for all ages.',
-    vibe:'Hands-on science workshops, live demos and museum access. Kids lead, adults follow and enjoy it.', crowd:'Young families, primary school age kids, patient parents. Energetic but well-organised.', bestFor:'Families with kids 4-12', tip:'Book the workshops in advance — they fill up. The Blue Whale alone is worth the trip.' },
-  { id:'s9', title:'Notting Hill Carnival Preview Party', date:addDays(6), venue:'Notting Hill', borough:'Kensington and Chelsea', category:'festivals', price:15, isFree:false, availability:'fast', image:null, source:'ticketmaster', url:'#', review:'Same sound systems, fraction of the crowd.',
-    vibe:'Soca, dancehall and afrobeats on proper sound systems. Outdoors, high energy, proper carnival spirit.', crowd:'Notting Hill locals, carnival regulars, mixed 20s-40s who know what it is. Dressed to move.', bestFor:'Groups, anyone who dances', tip:'Selling fast for a reason. Wear trainers, not heels. This is a dance event, not a viewing event.' },
-  { id:'s10', title:"Ronnie Scott's Jazz Night", date:addDays(2), venue:"Ronnie Scott's", borough:'Westminster', category:'music', price:30, isFree:false, availability:'available', image:null, source:'ticketmaster', url:'#', review:'Late shows after 11pm are where legends sit in unannounced.',
-    vibe:'Intimate live jazz in the most iconic room in London. Feels like another era. Genuinely special.', crowd:'Jazz faithful, tourists who did their research, couples on real date nights. Respectful listening culture.', bestFor:'Date night, music lovers, special occasion', tip:'Book a table not standing. The late show (11pm) is where the magic happens — musicians unwind and play freely.' },
-  { id:'s11', title:'East London Street Art Walk', date:addDays(1), venue:'Brick Lane', borough:'Tower Hamlets', category:'arts', price:0, isFree:true, availability:'available', image:null, source:'meetup', url:'#', review:'Routes change monthly, Shoreditch area consistently impresses.',
-    vibe:'Guided walk through Shoreditch and Brick Lane murals with commentary from working artists. Eye-opening.', crowd:'Creatives, curious tourists, locals who always meant to do this. Relaxed, walking pace, good chat.', bestFor:'Solo, couples, creative types', tip:'Bring a good phone camera. Saturday morning light in Shoreditch is unreal.' },
-  { id:'s12', title:'Tech Talks: AI and Society', date:addDays(3), venue:'Royal Institution', borough:'Westminster', category:'science', price:18, isFree:false, availability:'available', image:null, source:'eventbrite', url:'#', review:'Audience Q&A is always the highlight.',
-    vibe:'Rigorous but accessible talks on AI ethics, governance and real-world impact. Leaves you thinking for days.', crowd:'Tech professionals, researchers, policy types, engaged laypeople. Smart room, sharp questions.', bestFor:'Solo, anyone working in or around tech', tip:'Sit near the front for Q&A. The speakers stay for drinks afterwards — worth hanging around.' },
-  { id:'s13', title:'Fabric: Jungle & Drum and Bass All Night', date:addDays(5), venue:'Fabric', borough:'Islington', category:'music', price:18, isFree:false, availability:'fast', image:null, source:'ticketmaster', url:'#', review:'Fabric is the benchmark. Room 1 system hits differently at 2am.',
-    vibe:'Jungle and DnB in one of the world great club rooms. The sound system is genuinely physical. Peak London nightlife.', crowd:'Dedicated ravers, DnB heads, mix of 20s-35s who take their music seriously. Energy is everything here.', bestFor:'Groups of mates, solo ravers, anyone who dances', tip:'Get there before midnight to avoid the queue and catch the warm-up sets. Cloakroom is worth it.' },
-  { id:'s14', title:'Printworks: Dance Music Weekender', date:addDays(6), venue:'Printworks London', borough:'Lewisham', category:'festivals', price:22, isFree:false, availability:'available', image:null, source:'ticketmaster', url:'#', review:'One of the most unique venues in Europe.',
-    vibe:'Dance music across multiple stages in a vast ex-printing factory. The architecture alone is worth coming for.', crowd:'Mixed 20s-35s, fashion-forward crowd, high energy but not intimidating. Everyone is there to dance.', bestFor:'Groups, anyone who dances, venue spotters', tip:'The press halls stage is the main event. Arrive early to see it before it gets too packed to move.' },
-  { id:'s15', title:'Free Jazz & Soul Brunch', date:addDays(5), venue:'Jazz Cafe', borough:'Camden', category:'music', price:0, isFree:true, availability:'available', image:null, source:'eventbrite', url:'#', review:'The Sunday brunches are relaxed and always quality.',
-    vibe:'Live jazz and soul over brunch in Camden iconic venue. Low-key, high quality, exactly what Sunday should feel like.', crowd:'Locals, music lovers, couples doing Sunday properly. Relaxed dress, good vibes, no rush.', bestFor:'Couples, solo, lazy weekend morning', tip:'No booking needed but get there early for a good table. Food is solid — order the eggs.' },
-  { id:'s16', title:'Egg London: Weekend Rave', date:addDays(6), venue:'Egg London', borough:'Islington', category:'music', price:15, isFree:false, availability:'available', image:null, source:'ticketmaster', url:'#', review:'Three rooms, deep house to techno. One of the better mid-size venues left in London.',
-    vibe:'Deep house, techno and electronica across three rooms plus an outdoor terrace. Proper underground feel.', crowd:'House and techno regulars, 20s-35s, open and friendly. No attitude, just dancing. Terrace crowd is the move.', bestFor:'Solo ravers, groups, anyone into proper house music', tip:'Outdoor terrace is the spot in summer — better sound and you can actually breathe. Opens around 1am.' }
+const SAMPLES = [
+  { id:'s1', title:'The Rolling Stones - Hackney Diamonds Tour', date:addDays(0), venue:'The O2 Arena', borough:'Greenwich', category:'music', price:85, isFree:false, availability:'fast', image:null, source:'ticketmaster', url:'#', review:'The O2 consistently delivers world-class acoustics. Past shows here sell out within hours.', vibe:'Classic rock institution on a stadium scale. Big production, big singalongs, genuine history.', crowd:'Mixed 30s-60s, couples and groups. Dressed up but not club-dressed.', bestFor:'Groups, date night, bucket list', tip:'Upper tier has better views than you think. Grab a pint before doors close.' },
+  { id:'s2', title:'London Science Museum: Space Exhibition', date:addDays(2), venue:'Science Museum', borough:'Kensington and Chelsea', category:'science', price:0, isFree:true, availability:'available', image:null, source:'eventbrite', url:'#', review:'Previous exhibitions here regularly attract 200k+ visitors.', vibe:'Immersive space exploration through real artefacts and interactive displays.', crowd:'Families with kids, curious adults. Relaxed pace.', bestFor:'Families, solo curious types, date afternoon', tip:'Go straight to the top floor first — crowds thin out up there.' },
+  { id:'s3', title:'Chelsea Flower Show 2026', date:addDays(5), venue:'Royal Hospital Chelsea', borough:'Kensington and Chelsea', category:'festivals', price:45, isFree:false, availability:'available', image:null, source:'ticketmaster', url:'#', review:'Rated among the top 5 UK annual events.', vibe:'World-class garden design across sprawling grounds. Surprisingly moving.', crowd:'Largely 40s-60s, well-dressed garden enthusiasts. Very civilised.', bestFor:'Couples, parents, anyone who appreciates craft', tip:'Wednesday morning is least crowded. Wear comfortable shoes.' },
+  { id:'s4', title:'Arsenal vs Chelsea - Premier League', date:addDays(3), venue:'Emirates Stadium', borough:'Islington', category:'sports', price:65, isFree:false, availability:'sold-out', image:null, source:'ticketmaster', url:'#', review:'This fixture sells out every season.', vibe:'North London rivalry at full intensity. Proper atmosphere, proper stakes.', crowd:'Home and away fans, loyal season ticket holders. Loud from kickoff.', bestFor:'Football fans, group of mates', tip:'Already sold out — check resale sites.' },
+  { id:'s5', title:'Comedy at the Apollo', date:addDays(1), venue:'Hammersmith Apollo', borough:'Hammersmith and Fulham', category:'comedy', price:35, isFree:false, availability:'available', image:null, source:'eventbrite', url:'#', review:'Previous headliners call it their favourite UK venue.', vibe:'Headline stand-up in one of London best rooms.', crowd:'Mixed 20s-40s, groups and couples, everyone there to have a good time.', bestFor:'Groups, date night', tip:'Dress circle hits the sweet spot for sightlines and atmosphere.' },
+  { id:'s6', title:'Borough Market Food Festival', date:addDays(0), venue:'Borough Market', borough:'Southwark', category:'food', price:0, isFree:true, availability:'available', image:null, source:'meetup', url:'#', review:'Legendary events rain or shine.', vibe:'The best of British and international street food. Graze your way through.', crowd:'Food lovers, locals, tourists who got the memo. Relaxed, unhurried.', bestFor:'Solo, couples, anyone who eats', tip:'Go hungry. Arrive by 11am before the lunch crowd hits.' },
+  { id:'s7', title:'Tate Modern: New Acquisitions Opening', date:addDays(7), venue:'Tate Modern', borough:'Southwark', category:'arts', price:22, isFree:false, availability:'available', image:null, source:'eventbrite', url:'#', review:'Opening nights attract the creative elite.', vibe:'Private view energy — new work, strong opinions, the Turbine Hall doing something unexpected.', crowd:'Arts world, creatives, collectors. Smart casual dress.', bestFor:'Solo, date night, anyone in the arts scene', tip:'Opening nights have free drinks for the first two hours.' },
+  { id:'s8', title:'Family Science Day - Natural History Museum', date:addDays(4), venue:'Natural History Museum', borough:'Kensington and Chelsea', category:'family', price:0, isFree:true, availability:'available', image:null, source:'eventbrite', url:'#', review:'The dinosaur hall is genuinely awe-inspiring for all ages.', vibe:'Hands-on science workshops, live demos and museum access.', crowd:'Young families, primary school age kids, patient parents.', bestFor:'Families with kids 4-12', tip:'Book workshops in advance — they fill up.' },
+  { id:'s9', title:'Notting Hill Carnival Preview Party', date:addDays(6), venue:'Notting Hill', borough:'Kensington and Chelsea', category:'festivals', price:15, isFree:false, availability:'fast', image:null, source:'ticketmaster', url:'#', review:'Same sound systems, fraction of the crowd.', vibe:'Soca, dancehall and afrobeats on proper sound systems. High energy.', crowd:'Notting Hill locals, carnival regulars, mixed 20s-40s.', bestFor:'Groups, anyone who dances', tip:'Wear trainers, not heels. This is a dance event.' },
+  { id:'s10', title:"Ronnie Scott's Jazz Night", date:addDays(2), venue:"Ronnie Scott's", borough:'Westminster', category:'music', price:30, isFree:false, availability:'available', image:null, source:'ticketmaster', url:'#', review:'Late shows after 11pm are where legends sit in unannounced.', vibe:'Intimate live jazz in the most iconic room in London.', crowd:'Jazz faithful, tourists who did their research, couples on real date nights.', bestFor:'Date night, music lovers', tip:'Book a table not standing. The late show is where the magic happens.' },
+  { id:'s11', title:'East London Street Art Walk', date:addDays(1), venue:'Brick Lane', borough:'Tower Hamlets', category:'arts', price:0, isFree:true, availability:'available', image:null, source:'meetup', url:'#', review:'Routes change monthly, Shoreditch area consistently impresses.', vibe:'Guided walk through Shoreditch and Brick Lane murals with artist commentary.', crowd:'Creatives, curious tourists, locals. Relaxed, good chat.', bestFor:'Solo, couples, creative types', tip:'Saturday morning light in Shoreditch is unreal.' },
+  { id:'s12', title:'Tech Talks: AI and Society', date:addDays(3), venue:'Royal Institution', borough:'Westminster', category:'science', price:18, isFree:false, availability:'available', image:null, source:'eventbrite', url:'#', review:'Audience Q&A is always the highlight.', vibe:'Rigorous but accessible talks on AI ethics and real-world impact.', crowd:'Tech professionals, researchers, policy types, engaged laypeople.', bestFor:'Solo, anyone working in or around tech', tip:'Speakers stay for drinks — worth hanging around.' },
+  { id:'s13', title:'Fabric: Jungle & Drum and Bass All Night', date:addDays(5), venue:'Fabric', borough:'Islington', category:'music', price:18, isFree:false, availability:'fast', image:null, source:'ticketmaster', url:'#', review:'Fabric is the benchmark. Room 1 system hits differently at 2am.', vibe:'Jungle and DnB in one of the world great club rooms.', crowd:'Dedicated ravers, DnB heads, mix of 20s-35s.', bestFor:'Groups of mates, solo ravers', tip:'Get there before midnight to catch the warm-up sets.' },
+  { id:'s14', title:'Printworks: Dance Music Weekender', date:addDays(6), venue:'Printworks London', borough:'Lewisham', category:'festivals', price:22, isFree:false, availability:'available', image:null, source:'ticketmaster', url:'#', review:'One of the most unique venues in Europe.', vibe:'Dance music in a vast ex-printing factory. The architecture alone is worth coming for.', crowd:'Mixed 20s-35s, fashion-forward crowd, high energy.', bestFor:'Groups, anyone who dances', tip:'The press halls stage is the main event — arrive early.' },
+  { id:'s15', title:'Free Jazz & Soul Brunch', date:addDays(5), venue:'Jazz Cafe', borough:'Camden', category:'music', price:0, isFree:true, availability:'available', image:null, source:'eventbrite', url:'#', review:'The Sunday brunches are relaxed and always quality.', vibe:'Live jazz and soul over brunch. Low-key, high quality.', crowd:'Locals, music lovers, couples doing Sunday properly.', bestFor:'Couples, solo, lazy weekend morning', tip:'No booking needed but arrive early for a good table.' },
+  { id:'s16', title:'Egg London: Weekend Rave', date:addDays(6), venue:'Egg London', borough:'Islington', category:'music', price:15, isFree:false, availability:'available', image:null, source:'ticketmaster', url:'#', review:'Three rooms, deep house to techno. One of the better mid-size venues left in London.', vibe:'Deep house, techno and electronica across three rooms plus an outdoor terrace.', crowd:'House and techno regulars, 20s-35s, open and friendly.', bestFor:'Solo ravers, groups', tip:'Outdoor terrace is the spot in summer — opens around 1am.' }
 ];
 
-function addDays(n) { const d = new Date(); d.setDate(d.getDate() + n); return d; }
-
-function getMotiveEvents(events) {
-  const now = new Date();
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const dayOfWeek = today.getDay();
-  const daysToSat = (6 - dayOfWeek + 7) % 7 || 7;
-  const sat = new Date(today); sat.setDate(today.getDate() + daysToSat);
-  const monAfter = new Date(sat); monAfter.setDate(sat.getDate() + 2);
-  const motiveCategories = ['music', 'festivals', 'comedy', 'arts'];
-  return events.filter(function(e) {
-    const d = new Date(e.date);
-    return d >= sat && d < monAfter && motiveCategories.includes(e.category) && (e.isFree || e.price <= 30) && e.availability !== 'sold-out';
-  });
-}
-
-function renderMotives(events) {
-  const track = document.getElementById('motives-track');
-  let motives = getMotiveEvents(events);
-  if (motives.length === 0) {
-    motives = events.filter(function(e) {
-      return ['music','festivals','comedy'].includes(e.category) && (e.isFree || e.price <= 30) && e.availability !== 'sold-out';
-    }).slice(0, 8);
-  }
-  if (motives.length === 0) {
-    track.innerHTML = '<div style="padding:24px;color:rgba(255,255,255,0.3);font-size:13px;font-family:\'DM Mono\',monospace;">Nothing matching your vibe this weekend.</div>';
-    return;
-  }
-  track.innerHTML = motives.map(function(e) {
-    const catColor = CAT_COLORS_RAW[e.category] || '#999';
-    const catEmoji = CAT_EMOJIS[e.category] || '\u{1F4C5}';
-    const priceStr = e.isFree ? 'Free' : '\u00A3' + e.price;
-    const dateStr = formatDate(e.date);
-    const avail = e.availability || 'available';
-    const badgeClass = e.isFree ? 'free' : avail;
-    const badgeText = e.isFree ? 'Free' : (avail === 'fast' ? 'Selling Fast' : 'Available');
-    let cta;
-    if (e.isFree) cta = '<a href="' + e.url + '" target="_blank" class="motive-cta free">Register</a>';
-    else if (avail === 'fast') cta = '<a href="' + e.url + '" target="_blank" class="motive-cta fast">Buy Now</a>';
-    else cta = '<a href="' + e.url + '" target="_blank" class="motive-cta available">Get Tickets</a>';
-
-    // vibe panel — shows on hover, populated from API or demo data
-    const vibeHtml = (e.vibe || e.crowd || e.bestFor || e.tip) ? (
-      '<div class="motive-expand"><div class="motive-expand-inner">' +
-      (e.vibe ? '<div class="motive-expand-row"><div class="motive-expand-label">The Vibe</div><div class="motive-expand-value">' + e.vibe + '</div></div>' : '') +
-      (e.crowd ? '<div class="motive-expand-row"><div class="motive-expand-label">The Crowd</div><div class="motive-expand-value">' + e.crowd + '</div></div>' : '') +
-      (e.bestFor ? '<div class="motive-expand-row"><div class="motive-expand-label">Best For</div><div class="motive-expand-value">' + e.bestFor + '</div></div>' : '') +
-      (e.tip ? '<div class="motive-expand-row"><div class="motive-expand-label">Insider Tip</div><div class="motive-expand-value">' + e.tip + '</div></div>' : '') +
-      '</div></div>'
-    ) : '';
-
-    return '<div class="motive-card">' +
-      '<div class="motive-card-stripe" style="background:' + catColor + '"></div>' +
-      '<div class="motive-card-top">' +
-        '<div class="motive-card-head">' +
-          '<div class="motive-card-title">' + e.title + '</div>' +
-          '<span class="motive-avail ' + badgeClass + '"><span class="motive-avail-dot"></span>' + badgeText + '</span>' +
-        '</div>' +
-        '<div class="motive-card-meta">' +
-          '<div class="motive-meta-row"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>' + dateStr + '</div>' +
-          '<div class="motive-meta-row"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>' + e.venue + '</div>' +
-        '</div>' +
-        '<span class="motive-cat-pill" style="background:' + catColor + '20;color:' + catColor + '">' + catEmoji + ' ' + e.category + '</span>' +
-      '</div>' +
-      vibeHtml +
-      '<div class="motive-card-footer">' +
-        '<div class="motive-price' + (e.isFree ? ' free' : '') + '">' + priceStr + '</div>' +
-        cta +
-      '</div>' +
-    '</div>';
-  }).join('');
-}
-
+// ── INIT ──
 document.addEventListener('DOMContentLoaded', function() {
   updateApiBtn();
-  setupBoroughMap();
+  setupMap();
   setupFilters();
   setupSearch();
   loadEvents();
 });
 
+// ── API ──
 function updateApiBtn() {
-  const btn = document.getElementById('api-config-btn');
-  if (TM_KEY || EB_KEY) btn.classList.add('configured');
-  else btn.classList.remove('configured');
-}
-
-function setupBoroughMap() {
-  const tooltip = document.getElementById('map-tooltip');
-  document.querySelectorAll('#london-map .borough').forEach(function(el) {
-    const name = el.dataset.borough;
-    el.addEventListener('click', function() {
-      if (state.selectedBoroughs.has(name)) { state.selectedBoroughs.delete(name); el.classList.remove('selected'); }
-      else { state.selectedBoroughs.add(name); el.classList.add('selected'); }
-      updateSelectedBoroughTags(); applyFilters();
-    });
-    el.addEventListener('mousemove', function(e) { tooltip.style.display='block'; tooltip.textContent=name; tooltip.style.left=(e.clientX+12)+'px'; tooltip.style.top=(e.clientY-32)+'px'; });
-    el.addEventListener('mouseleave', function() { tooltip.style.display='none'; });
-  });
-}
-
-function updateSelectedBoroughTags() {
-  const container = document.getElementById('map-selected-info');
-  container.innerHTML = '';
-  if (state.selectedBoroughs.size === 0) return;
-  state.selectedBoroughs.forEach(function(b) {
-    const tag = document.createElement('button');
-    tag.className = 'map-selected-tag';
-    tag.innerHTML = b + ' \u2715';
-    tag.onclick = function() { state.selectedBoroughs.delete(b); document.querySelectorAll('#london-map .borough[data-borough="'+b+'"]').forEach(function(el){el.classList.remove('selected');}); updateSelectedBoroughTags(); applyFilters(); };
-    container.appendChild(tag);
-  });
-  if (state.selectedBoroughs.size > 1) { const clr = document.createElement('button'); clr.className='map-clear-all'; clr.textContent='Clear all'; clr.onclick=clearBoroughs; container.appendChild(clr); }
-}
-
-function clearBoroughs() {
-  state.selectedBoroughs.clear();
-  document.querySelectorAll('#london-map .borough').forEach(function(el){el.classList.remove('selected');});
-  updateSelectedBoroughTags(); applyFilters();
-}
-
-function setupFilters() {
-  ['#type-filters','#type-filters-mobile'].forEach(function(sel) {
-    document.querySelectorAll(sel+' .pill').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        document.querySelectorAll('#type-filters .pill,#type-filters-mobile .pill').forEach(function(b){b.classList.remove('active');});
-        document.querySelectorAll('#type-filters .pill[data-type="'+btn.dataset.type+'"],#type-filters-mobile .pill[data-type="'+btn.dataset.type+'"]').forEach(function(b){b.classList.add('active');});
-        state.activeType=btn.dataset.type; applyFilters();
-      });
-    });
-  });
-  document.getElementById('date-filter').addEventListener('change',function(e){state.dateFilter=e.target.value;document.getElementById('date-filter-mobile').value=e.target.value;applyFilters();});
-  document.getElementById('date-filter-mobile').addEventListener('change',function(e){state.dateFilter=e.target.value;document.getElementById('date-filter').value=e.target.value;applyFilters();});
-  document.getElementById('price-filter').addEventListener('input',function(e){state.maxPrice=parseInt(e.target.value);document.getElementById('price-display').textContent=state.maxPrice>=200?'Any price':'Up to \u00A3'+state.maxPrice;document.getElementById('price-filter-mobile').value=e.target.value;document.getElementById('price-display-mobile').textContent=state.maxPrice>=200?'Any':'\u00A3'+state.maxPrice;applyFilters();});
-  document.getElementById('price-filter-mobile').addEventListener('input',function(e){state.maxPrice=parseInt(e.target.value);document.getElementById('price-filter').value=e.target.value;document.getElementById('price-display').textContent=state.maxPrice>=200?'Any price':'Up to \u00A3'+state.maxPrice;document.getElementById('price-display-mobile').textContent=state.maxPrice>=200?'Any':'\u00A3'+state.maxPrice;applyFilters();});
-  document.getElementById('avail-filter').addEventListener('change',function(e){state.availFilter=e.target.value;applyFilters();});
-  document.getElementById('sort-select').addEventListener('change',function(e){state.sortBy=e.target.value;applyFilters();});
-}
-
-function fuzzyScore(str, query) {
-  // Returns a score 0-100. Higher = better match.
-  if (!query) return 0;
-  str = str.toLowerCase();
-  query = query.toLowerCase();
-  // Exact substring — highest score
-  if (str.includes(query)) return 100;
-  // All words present in any order
-  var words = query.split(/\s+/).filter(Boolean);
-  if (words.length > 1 && words.every(function(w) { return str.includes(w); })) return 85;
-  // Most words present
-  var matched = words.filter(function(w) { return str.includes(w); });
-  if (matched.length > 0) return Math.round(60 * matched.length / words.length);
-  // Character-level fuzzy — query chars appear in order in str
-  var qi = 0;
-  for (var si = 0; si < str.length && qi < query.length; si++) {
-    if (str[si] === query[qi]) qi++;
-  }
-  if (qi === query.length) return Math.max(10, Math.round(30 * query.length / str.length));
-  // Partial prefix on any word in title
-  var strWords = str.split(/\s+/);
-  var anyPrefix = strWords.some(function(sw) { return sw.startsWith(query) || query.startsWith(sw.slice(0,3)); });
-  if (anyPrefix) return 40;
-  return 0;
-}
-
-function searchEvents(query) {
-  if (!query || query.length < 2) return [];
-  return state.events.map(function(e) {
-    var score = Math.max(
-      fuzzyScore(e.title, query),
-      fuzzyScore(e.venue, query),
-      fuzzyScore(e.category, query),
-      fuzzyScore(e.borough, query)
-    );
-    return { event: e, score: score };
-  })
-  .filter(function(r) { return r.score >= 20; })
-  .sort(function(a, b) { return b.score - a.score; })
-  .slice(0, 8)
-  .map(function(r) { return r.event; });
-}
-
-function highlightMatch(text, query) {
-  if (!query) return text;
-  var idx = text.toLowerCase().indexOf(query.toLowerCase());
-  if (idx === -1) return text;
-  return text.slice(0, idx) + '<mark>' + text.slice(idx, idx + query.length) + '</mark>' + text.slice(idx + query.length);
-}
-
-function renderSearchDropdown(query) {
-  var dropdown = document.getElementById('search-dropdown');
-  if (!query || query.length < 2) {
-    dropdown.classList.remove('open');
-    return;
-  }
-  var results = searchEvents(query);
-  var html = '';
-  if (results.length === 0) {
-    html = '<div class="search-no-results">No events found for "' + query + '"<span>Try different keywords or check the spelling</span></div>';
-  } else {
-    html += '<div class="search-dropdown-header">' + results.length + ' result' + (results.length !== 1 ? 's' : '') + '</div>';
-    html += results.map(function(e) {
-      var cc = CAT_COLORS_RAW[e.category] || '#999';
-      var priceStr = e.isFree ? 'Free' : '£' + e.price;
-      var dateStr = formatDate(e.date);
-      return '<div class="search-result-item" onclick="selectSearchResult(' + JSON.stringify(e.id) + ')">' +
-        '<div class="search-result-cat" style="background:' + cc + '"></div>' +
-        '<div class="search-result-info">' +
-          '<div class="search-result-title">' + highlightMatch(e.title, query) + '</div>' +
-          '<div class="search-result-sub">' + dateStr + ' &middot; ' + e.venue + '</div>' +
-        '</div>' +
-        '<div class="search-result-price' + (e.isFree ? ' free' : '') + '">' + priceStr + '</div>' +
-      '</div>';
-    }).join('');
-  }
-  dropdown.innerHTML = html;
-  dropdown.classList.add('open');
-}
-
-function selectSearchResult(id) {
-  // Close dropdown, filter grid to just this event
-  var dropdown = document.getElementById('search-dropdown');
-  dropdown.classList.remove('open');
-  var e = state.events.find(function(ev) { return ev.id === id; });
-  if (e) {
-    document.getElementById('search-input').value = e.title;
-    state.searchQuery = e.title.toLowerCase();
-    applyFilters();
-    // Scroll to grid
-    document.querySelector('.events-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-}
-
-function setupSearch() {
-  var debounce;
-  var input = document.getElementById('search-input');
-  input.addEventListener('input', function(e) {
-    clearTimeout(debounce);
-    var q = e.target.value.trim();
-    debounce = setTimeout(function() {
-      state.searchQuery = q.toLowerCase();
-      renderSearchDropdown(q);
-      applyFilters();
-    }, 150);
-  });
-  // Close dropdown on click outside
-  document.addEventListener('click', function(e) {
-    if (!e.target.closest('.nav-search')) {
-      document.getElementById('search-dropdown').classList.remove('open');
-    }
-  });
-  // Close on Escape
-  input.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-      document.getElementById('search-dropdown').classList.remove('open');
-      input.blur();
-    }
-    if (e.key === 'Enter') {
-      document.getElementById('search-dropdown').classList.remove('open');
-      document.querySelector('.events-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  });
+  document.getElementById('api-btn').classList.toggle('ok', !!(TM_KEY || EB_KEY));
 }
 
 async function loadEvents() {
   var events = [];
-  if (TM_KEY) events = events.concat(await fetchTicketmaster());
-  if (EB_KEY) events = events.concat(await fetchEventbrite());
-  if (events.length === 0) { events = SAMPLE_EVENTS; if (!TM_KEY && !EB_KEY) showToast('Demo mode - add API keys for live events'); }
-  state.events = events;
-  renderMotives(events);
+  if (TM_KEY) events = events.concat(await fetchTM());
+  if (EB_KEY) events = events.concat(await fetchEB());
+  if (!events.length) {
+    events = SAMPLES;
+    if (!TM_KEY && !EB_KEY) showToast('Demo mode — add API keys for live events');
+  }
+  S.events = events;
+  renderMotives();
   applyFilters();
 }
 
-async function fetchTicketmaster() {
+async function fetchTM() {
   try {
-    const p = new URLSearchParams({apikey:TM_KEY,city:'London',countryCode:'GB',size:50,sort:'date,asc'});
-    const r = await fetch('https://app.ticketmaster.com/discovery/v2/events.json?'+p);
-    const d = await r.json();
-    if (!d._embedded||!d._embedded.events) return [];
-    return d._embedded.events.map(function(e){return{id:'tm_'+e.id,title:e.name,date:new Date(e.dates&&e.dates.start?e.dates.start.dateTime||e.dates.start.localDate:''),venue:e._embedded&&e._embedded.venues?e._embedded.venues[0].name:'London',borough:guessBoroughFromVenue(e._embedded&&e._embedded.venues?e._embedded.venues[0].name:''),category:mapTMCategory(e.classifications&&e.classifications[0]?e.classifications[0].segment.name:''),price:e.priceRanges?e.priceRanges[0].min:0,isFree:!e.priceRanges,availability:e.dates&&e.dates.status?e.dates.status.code==='onsale'?'available':'sold-out':'available',image:e.images?e.images[0].url:null,source:'ticketmaster',url:e.url||'#',review:null,vibe:null,crowd:null,bestFor:null,tip:null};});
-  } catch(err){console.warn('TM failed:',err);return [];}
+    var p = new URLSearchParams({ apikey:TM_KEY, city:'London', countryCode:'GB', size:50, sort:'date,asc' });
+    var r = await fetch('https://app.ticketmaster.com/discovery/v2/events.json?' + p);
+    var d = await r.json();
+    if (!d._embedded || !d._embedded.events) return [];
+    return d._embedded.events.map(function(e) {
+      return {
+        id: 'tm_' + e.id,
+        title: e.name,
+        date: new Date(e.dates && e.dates.start ? e.dates.start.dateTime || e.dates.start.localDate : ''),
+        venue: e._embedded && e._embedded.venues ? e._embedded.venues[0].name : 'London',
+        borough: guessBorough(e._embedded && e._embedded.venues ? e._embedded.venues[0].name : ''),
+        category: tmCat(e.classifications && e.classifications[0] ? e.classifications[0].segment.name : ''),
+        price: e.priceRanges ? e.priceRanges[0].min : 0,
+        isFree: !e.priceRanges,
+        availability: e.dates && e.dates.status ? (e.dates.status.code === 'onsale' ? 'available' : 'sold-out') : 'available',
+        image: e.images ? e.images[0].url : null,
+        source: 'ticketmaster', url: e.url || '#',
+        review: null, vibe: null, crowd: null, bestFor: null, tip: null
+      };
+    });
+  } catch(e) { console.warn('TM:', e); return []; }
 }
 
-async function fetchEventbrite() {
+async function fetchEB() {
   try {
-    const p = new URLSearchParams({'location.address':'London, UK','location.within':'30km',expand:'venue,ticket_classes',sort_by:'date'});
-    const r = await fetch('https://www.eventbriteapi.com/v3/events/search/?'+p,{headers:{Authorization:'Bearer '+EB_KEY}});
-    const d = await r.json();
+    var p = new URLSearchParams({ 'location.address':'London, UK', 'location.within':'30km', expand:'venue,ticket_classes', sort_by:'date' });
+    var r = await fetch('https://www.eventbriteapi.com/v3/events/search/?' + p, { headers: { Authorization: 'Bearer ' + EB_KEY } });
+    var d = await r.json();
     if (!d.events) return [];
-    return d.events.map(function(e){return{id:'eb_'+e.id,title:e.name?e.name.text:'Event',date:new Date(e.start?e.start.utc:''),venue:e.venue?e.venue.name:'London',borough:guessBoroughFromVenue(e.venue?e.venue.name:''),category:mapEBCategory(e.category_id),price:e.ticket_classes&&e.ticket_classes[0]&&e.ticket_classes[0].cost?e.ticket_classes[0].cost.major_value:0,isFree:e.is_free,availability:e.status==='live'?'available':'sold-out',image:e.logo?e.logo.url:null,source:'eventbrite',url:e.url||'#',review:null,vibe:null,crowd:null,bestFor:null,tip:null};});
-  } catch(err){console.warn('EB failed:',err);return [];}
+    return d.events.map(function(e) {
+      return {
+        id: 'eb_' + e.id,
+        title: e.name ? e.name.text : 'Event',
+        date: new Date(e.start ? e.start.utc : ''),
+        venue: e.venue ? e.venue.name : 'London',
+        borough: guessBorough(e.venue ? e.venue.name : ''),
+        category: ebCat(e.category_id),
+        price: e.ticket_classes && e.ticket_classes[0] && e.ticket_classes[0].cost ? e.ticket_classes[0].cost.major_value : 0,
+        isFree: e.is_free,
+        availability: e.status === 'live' ? 'available' : 'sold-out',
+        image: e.logo ? e.logo.url : null,
+        source: 'eventbrite', url: e.url || '#',
+        review: null, vibe: null, crowd: null, bestFor: null, tip: null
+      };
+    });
+  } catch(e) { console.warn('EB:', e); return []; }
 }
 
-function mapTMCategory(seg){if(!seg)return'other';const s=seg.toLowerCase();if(s.includes('music'))return'music';if(s.includes('sport'))return'sports';if(s.includes('arts')||s.includes('theatre'))return'arts';if(s.includes('family'))return'family';if(s.includes('comedy'))return'comedy';if(s.includes('festival'))return'festivals';if(s.includes('science')||s.includes('tech'))return'science';return'other';}
-function mapEBCategory(id){return({'103':'music','108':'sports','105':'arts','107':'science','110':'food','113':'family','102':'science','104':'festivals'})[String(id)]||'other';}
-function guessBoroughFromVenue(name){const n=name.toLowerCase();if(n.includes('o2')||n.includes('greenwich'))return'Greenwich';if(n.includes('wembley'))return'Brent';if(n.includes('emirates')||n.includes('arsenal')||n.includes('islington'))return'Islington';if(n.includes('chelsea')||n.includes('stamford')||n.includes('kensington')||n.includes('natural history')||n.includes('science museum'))return'Kensington and Chelsea';if(n.includes('tate')||n.includes('borough market')||n.includes('southwark'))return'Southwark';if(n.includes('westminster')||n.includes('ronnie')||n.includes('royal institution'))return'Westminster';if(n.includes('hackney'))return'Hackney';if(n.includes('brixton')||n.includes('lambeth'))return'Lambeth';if(n.includes('hammersmith')||n.includes('apollo'))return'Hammersmith and Fulham';if(n.includes('camden')||n.includes('roundhouse')||n.includes('jazz cafe'))return'Camden';if(n.includes('fabric')||n.includes('egg london'))return'Islington';if(n.includes('printworks'))return'Lewisham';if(n.includes('shoreditch')||n.includes('brick lane')||n.includes('tower hamlets'))return'Tower Hamlets';if(n.includes('canary')||n.includes('docklands'))return'Tower Hamlets';if(n.includes('notting hill'))return'Kensington and Chelsea';return'Westminster';}
-
-function applyFilters(){
-  var filtered=state.events.slice();
-  if(state.selectedBoroughs.size>0)filtered=filtered.filter(function(e){return state.selectedBoroughs.has(e.borough);});
-  if(state.activeType!=='all')filtered=filtered.filter(function(e){return e.category===state.activeType;});
-  var now=new Date();var today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
-  if(state.dateFilter==='today'){filtered=filtered.filter(function(e){var d=new Date(e.date);d.setHours(0,0,0,0);return d.getTime()===today.getTime();});}
-  else if(state.dateFilter==='weekend'){var day=today.getDay();var sat=new Date(today);sat.setDate(today.getDate()+((6-day+7)%7||7));var sun=new Date(sat);sun.setDate(sat.getDate()+1);filtered=filtered.filter(function(e){var d=new Date(e.date);d.setHours(0,0,0,0);return d>=sat&&d<=sun;});}
-  else if(state.dateFilter==='week'){var wk=new Date(today);wk.setDate(today.getDate()+7);filtered=filtered.filter(function(e){return new Date(e.date)>=today&&new Date(e.date)<=wk;});}
-  else if(state.dateFilter==='month'){var mo=new Date(today);mo.setDate(today.getDate()+30);filtered=filtered.filter(function(e){return new Date(e.date)>=today&&new Date(e.date)<=mo;});}
-  if(state.maxPrice<200)filtered=filtered.filter(function(e){return e.isFree||e.price<=state.maxPrice;});
-  if(state.availFilter==='available')filtered=filtered.filter(function(e){return e.availability!=='sold-out';});
-  else if(state.availFilter==='free')filtered=filtered.filter(function(e){return e.isFree;});
-  if(state.searchQuery){filtered=filtered.filter(function(e){return Math.max(fuzzyScore(e.title,state.searchQuery),fuzzyScore(e.venue,state.searchQuery),fuzzyScore(e.category,state.searchQuery),fuzzyScore(e.borough,state.searchQuery))>=20;});filtered.sort(function(a,b){var sa=Math.max(fuzzyScore(a.title,state.searchQuery),fuzzyScore(a.venue,state.searchQuery));var sb=Math.max(fuzzyScore(b.title,state.searchQuery),fuzzyScore(b.venue,state.searchQuery));return sb-sa;});}
-  filtered.sort(function(a,b){if(state.sortBy==='date')return new Date(a.date)-new Date(b.date);if(state.sortBy==='price-asc')return(a.isFree?0:a.price)-(b.isFree?0:b.price);if(state.sortBy==='price-desc')return(b.isFree?0:b.price)-(a.isFree?0:a.price);if(state.sortBy==='name')return a.title.localeCompare(b.title);return 0;});
-  state.filtered=filtered;renderGrid();
+function tmCat(s) {
+  if (!s) return 'other'; s = s.toLowerCase();
+  if (s.includes('music')) return 'music';
+  if (s.includes('sport')) return 'sports';
+  if (s.includes('arts') || s.includes('theatre')) return 'arts';
+  if (s.includes('family')) return 'family';
+  if (s.includes('comedy')) return 'comedy';
+  if (s.includes('festival')) return 'festivals';
+  if (s.includes('science') || s.includes('tech')) return 'science';
+  return 'other';
+}
+function ebCat(id) {
+  return ({'103':'music','108':'sports','105':'arts','107':'science','110':'food','113':'family','104':'festivals'})[String(id)] || 'other';
+}
+function guessBorough(name) {
+  var n = name.toLowerCase();
+  if (n.includes('o2') || n.includes('greenwich')) return 'Greenwich';
+  if (n.includes('wembley')) return 'Brent';
+  if (n.includes('emirates') || n.includes('arsenal')) return 'Islington';
+  if (n.includes('kensington') || n.includes('natural history') || n.includes('science museum') || n.includes('chelsea') || n.includes('stamford')) return 'Kensington and Chelsea';
+  if (n.includes('tate') || n.includes('borough market') || n.includes('southwark')) return 'Southwark';
+  if (n.includes('westminster') || n.includes('ronnie') || n.includes('royal institution')) return 'Westminster';
+  if (n.includes('hackney')) return 'Hackney';
+  if (n.includes('brixton') || n.includes('lambeth')) return 'Lambeth';
+  if (n.includes('hammersmith') || n.includes('apollo')) return 'Hammersmith and Fulham';
+  if (n.includes('camden') || n.includes('roundhouse') || n.includes('jazz cafe')) return 'Camden';
+  if (n.includes('fabric') || n.includes('egg london')) return 'Islington';
+  if (n.includes('printworks')) return 'Lewisham';
+  if (n.includes('shoreditch') || n.includes('brick lane')) return 'Tower Hamlets';
+  if (n.includes('canary') || n.includes('docklands')) return 'Tower Hamlets';
+  if (n.includes('notting hill')) return 'Kensington and Chelsea';
+  return 'Westminster';
 }
 
-function renderGrid(){
-  const grid=document.getElementById('events-grid');const countEl=document.getElementById('results-count');
-  if(state.filtered.length===0&&state.events.length===0){grid.innerHTML='<div class="loading-state"><div class="spinner"></div><p>Fetching London events...</p></div>';countEl.innerHTML='LOADING...';return;}
-  if(state.filtered.length===0){grid.innerHTML='<div class="empty-state"><h3>No events found</h3><p>Try adjusting your filters or clearing the borough selection.</p></div>';countEl.innerHTML='<span>0</span> EVENTS';return;}
-  countEl.innerHTML='<span>'+state.filtered.length+'</span> EVENTS';
-  grid.innerHTML=state.filtered.map(function(e,i){return renderCard(e,i);}).join('');
+// ── MOTIVES ──
+function renderMotives() {
+  var track = document.getElementById('motives-track');
+  var now = new Date(), today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  var dow = today.getDay(), dts = (6 - dow + 7) % 7 || 7;
+  var sat = new Date(today); sat.setDate(today.getDate() + dts);
+  var mon = new Date(sat); mon.setDate(sat.getDate() + 2);
+
+  var picks = S.events.filter(function(e) {
+    var d = new Date(e.date);
+    return d >= sat && d < mon && MOTIVE_CATS.includes(e.category) && (e.isFree || e.price <= 30) && e.availability !== 'sold-out';
+  });
+  if (!picks.length) {
+    picks = S.events.filter(function(e) {
+      return MOTIVE_CATS.includes(e.category) && (e.isFree || e.price <= 30) && e.availability !== 'sold-out';
+    }).slice(0, 8);
+  }
+  if (!picks.length) { track.innerHTML = '<div style="padding:24px;color:rgba(255,255,255,0.3);font-family:\'DM Mono\',monospace;font-size:13px">Nothing matching your vibe this weekend.</div>'; return; }
+
+  track.innerHTML = picks.map(function(e) {
+    var cc = CAT_COLOR[e.category] || '#999';
+    var ce = CAT_EMOJI[e.category] || '\u{1F4C5}';
+    var avail = e.availability || 'available';
+    var bc = e.isFree ? 'free' : avail;
+    var bt = e.isFree ? 'Free' : (avail === 'fast' ? 'Selling Fast' : 'Available');
+    var cta = e.isFree ? '<a href="'+e.url+'" target="_blank" class="motive-cta free">Register</a>'
+            : avail === 'fast' ? '<a href="'+e.url+'" target="_blank" class="motive-cta fast">Buy Now</a>'
+            : '<a href="'+e.url+'" target="_blank" class="motive-cta available">Get Tickets</a>';
+    var expand = (e.vibe || e.crowd || e.bestFor || e.tip) ?
+      '<div class="motive-expand"><div class="motive-expand-inner">' +
+      (e.vibe ? '<div class="motive-expand-row"><div class="motive-expand-label">The Vibe</div><div class="motive-expand-val">'+e.vibe+'</div></div>' : '') +
+      (e.crowd ? '<div class="motive-expand-row"><div class="motive-expand-label">The Crowd</div><div class="motive-expand-val">'+e.crowd+'</div></div>' : '') +
+      (e.bestFor ? '<div class="motive-expand-row"><div class="motive-expand-label">Best For</div><div class="motive-expand-val">'+e.bestFor+'</div></div>' : '') +
+      (e.tip ? '<div class="motive-expand-row"><div class="motive-expand-label">Insider Tip</div><div class="motive-expand-val">'+e.tip+'</div></div>' : '') +
+      '</div></div>' : '';
+    return '<div class="motive-card">' +
+      '<div class="motive-stripe" style="background:'+cc+'"></div>' +
+      '<div class="motive-body">' +
+        '<div class="motive-head"><div class="motive-title">'+e.title+'</div><span class="motive-avail '+bc+'"><span class="motive-avail-dot"></span>'+bt+'</span></div>' +
+        '<div class="motive-meta">' +
+          '<div class="motive-meta-row"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>'+formatDate(e.date)+'</div>' +
+          '<div class="motive-meta-row"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>'+e.venue+'</div>' +
+        '</div>' +
+        '<span class="motive-cat" style="background:'+cc+'20;color:'+cc+'">'+ce+' '+e.category+'</span>' +
+      '</div>' +
+      expand +
+      '<div class="motive-footer"><div class="motive-price'+(e.isFree?' free':'')+'">'+( e.isFree?'Free':'\u00A3'+e.price)+'</div>'+cta+'</div>' +
+    '</div>';
+  }).join('');
 }
 
-function renderCard(e,i){
-  const cc=CAT_COLORS_RAW[e.category]||'#999';const ce=CAT_EMOJIS[e.category]||'\u{1F4C5}';
-  const priceStr=e.isFree?'Free':'\u00A3'+e.price;const dateStr=formatDate(e.date);const avail=e.availability||'available';
-  const bc=e.isFree?'free':avail;const bt=e.isFree?'Free':(avail==='available'?'Available':avail==='fast'?'Selling Fast':'Sold Out');
-  const badge='<span class="avail-badge '+bc+'"><span class="avail-dot"></span>'+bt+'</span>';
-  let cta;if(avail==='sold-out')cta='<button class="card-cta sold-out" disabled>Sold Out</button>';else if(e.isFree)cta='<a href="'+e.url+'" target="_blank" class="card-cta free">Register Free</a>';else if(avail==='fast')cta='<a href="'+e.url+'" target="_blank" class="card-cta fast">Buy Now</a>';else cta='<a href="'+e.url+'" target="_blank" class="card-cta available">Get Tickets</a>';
-  const reviewHtml=e.review?'<div class="card-review" style="--cat-color:'+cc+'"><div class="card-review-label">Past Experience</div>'+e.review+'</div>':'';
-  const imgHtml=e.image?'<img class="card-image" src="'+e.image+'" alt="" loading="lazy">':'<div class="card-image-placeholder" style="background:'+cc+'15">'+ce+'</div>';
-  return'<div class="event-card'+(avail==='sold-out'?' sold-out':'')+'" style="animation-delay:'+(i*0.04)+'s">'+imgHtml+'<div class="card-cat-stripe" style="--cat-color:'+cc+'"></div><div class="card-body"><div class="card-top"><div class="card-title">'+e.title+'</div>'+badge+'</div><div class="card-meta"><span class="cat-pill" style="--cat-color:'+cc+'">'+ce+' '+e.category+'</span><span class="card-meta-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>'+dateStr+'</span><span class="card-meta-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>'+e.venue+'</span><span class="card-meta-item" style="font-size:11px;color:var(--text-muted)">\uD83D\uDCCD '+e.borough+'</span></div><div class="card-price'+(e.isFree?' free-price':'')+'">'+priceStr+'</div>'+reviewHtml+'</div><div class="card-footer">'+cta+'<span class="card-source">'+e.source+'</span></div></div>';
+// ── MAP ──
+function setupMap() {
+  var tooltip = document.getElementById('map-tooltip');
+  document.querySelectorAll('#london-map .borough').forEach(function(el) {
+    el.addEventListener('click', function() {
+      var name = el.dataset.borough;
+      if (S.boroughs.has(name)) { S.boroughs.delete(name); el.classList.remove('selected'); }
+      else { S.boroughs.add(name); el.classList.add('selected'); }
+      renderBoroughTags(); applyFilters();
+    });
+    el.addEventListener('mousemove', function(ev) {
+      tooltip.style.display = 'block'; tooltip.textContent = el.dataset.borough;
+      tooltip.style.left = (ev.clientX + 12) + 'px'; tooltip.style.top = (ev.clientY - 32) + 'px';
+    });
+    el.addEventListener('mouseleave', function() { tooltip.style.display = 'none'; });
+  });
 }
 
-function formatDate(d){if(!d)return'';const date=new Date(d);const now=new Date();const today=new Date(now.getFullYear(),now.getMonth(),now.getDate());const eventDay=new Date(date.getFullYear(),date.getMonth(),date.getDate());const diff=Math.round((eventDay-today)/86400000);const time=date.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});if(diff===0)return'Today, '+time;if(diff===1)return'Tomorrow, '+time;if(diff<7)return date.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});return date.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}
+function renderBoroughTags() {
+  var c = document.getElementById('map-selected-info'); c.innerHTML = '';
+  if (!S.boroughs.size) return;
+  S.boroughs.forEach(function(b) {
+    var t = document.createElement('button'); t.className = 'map-selected-tag';
+    t.innerHTML = b + ' \u2715';
+    t.onclick = function() {
+      S.boroughs.delete(b);
+      document.querySelectorAll('#london-map .borough[data-borough="'+b+'"]').forEach(function(el){el.classList.remove('selected');});
+      renderBoroughTags(); applyFilters();
+    };
+    c.appendChild(t);
+  });
+  if (S.boroughs.size > 1) {
+    var x = document.createElement('button'); x.className = 'map-clear'; x.textContent = 'Clear all';
+    x.onclick = function() { S.boroughs.clear(); document.querySelectorAll('#london-map .borough').forEach(function(el){el.classList.remove('selected');}); renderBoroughTags(); applyFilters(); };
+    c.appendChild(x);
+  }
+}
 
-function openApiModal(){document.getElementById('tm-key').value=TM_KEY;document.getElementById('eb-key').value=EB_KEY;document.getElementById('api-modal').classList.add('open');}
-function closeApiModal(){document.getElementById('api-modal').classList.remove('open');}
-function saveApiKeys(){TM_KEY=document.getElementById('tm-key').value.trim();EB_KEY=document.getElementById('eb-key').value.trim();localStorage.setItem('ll_tm_key',TM_KEY);localStorage.setItem('ll_eb_key',EB_KEY);updateApiBtn();closeApiModal();state.events=[];loadEvents();showToast('API keys saved - loading live events...');}
-function openMobileFilters(){document.getElementById('mobile-overlay').classList.add('open');document.getElementById('mobile-drawer').classList.add('open');}
-function closeMobileFilters(){document.getElementById('mobile-overlay').classList.remove('open');document.getElementById('mobile-drawer').classList.remove('open');}
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},4000);}
+// ── FILTERS ──
+function setupFilters() {
+  // Type pills — sync desktop + mobile
+  document.querySelectorAll('#type-pills .pill, #type-pills-mob .pill').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var t = btn.dataset.type;
+      document.querySelectorAll('#type-pills .pill, #type-pills-mob .pill').forEach(function(b) { b.classList.toggle('active', b.dataset.type === t); });
+      S.type = t; applyFilters();
+    });
+  });
+  // Date — sync desktop + mobile
+  document.getElementById('date-filter').addEventListener('change', function(e) { S.date = e.target.value; document.getElementById('date-filter-mob').value = e.target.value; applyFilters(); });
+  document.getElementById('date-filter-mob').addEventListener('change', function(e) { S.date = e.target.value; document.getElementById('date-filter').value = e.target.value; applyFilters(); });
+  // Price — sync desktop + mobile
+  function updatePrice(val) {
+    S.maxPrice = parseInt(val);
+    var lbl = S.maxPrice >= 200 ? 'Any price' : 'Up to \u00A3' + S.maxPrice;
+    document.getElementById('price-val').textContent = lbl;
+    document.getElementById('price-val-mob').textContent = S.maxPrice >= 200 ? 'Any' : '\u00A3' + S.maxPrice;
+    document.getElementById('price-range').value = val;
+    document.getElementById('price-range-mob').value = val;
+  }
+  document.getElementById('price-range').addEventListener('input', function(e) { updatePrice(e.target.value); applyFilters(); });
+  document.getElementById('price-range-mob').addEventListener('input', function(e) { updatePrice(e.target.value); applyFilters(); });
+  // Availability
+  document.getElementById('avail-filter').addEventListener('change', function(e) { S.avail = e.target.value; applyFilters(); });
+  // Sort
+  document.getElementById('sort-select').addEventListener('change', function(e) { S.sort = e.target.value; applyFilters(); });
+}
+
+// ── SEARCH ──
+function fuzzyScore(str, q) {
+  if (!q) return 0;
+  str = str.toLowerCase(); q = q.toLowerCase();
+  if (str.includes(q)) return 100;
+  var words = q.split(' ').filter(Boolean);
+  if (words.length > 1 && words.every(function(w){return str.includes(w);})) return 85;
+  var matched = words.filter(function(w){return str.includes(w);});
+  if (matched.length) return Math.round(60 * matched.length / words.length);
+  var qi = 0;
+  for (var si = 0; si < str.length && qi < q.length; si++) { if (str[si] === q[qi]) qi++; }
+  if (qi === q.length) return Math.max(10, Math.round(30 * q.length / str.length));
+  return 0;
+}
+
+function scoreEvent(e, q) {
+  return Math.max(fuzzyScore(e.title,q), fuzzyScore(e.venue,q), fuzzyScore(e.category,q), fuzzyScore(e.borough,q));
+}
+
+function setupSearch() {
+  var input = document.getElementById('search-input'), dd = document.getElementById('search-dropdown'), timer;
+  input.addEventListener('input', function() {
+    clearTimeout(timer);
+    timer = setTimeout(function() {
+      var q = input.value.trim();
+      S.query = q.toLowerCase();
+      renderDropdown(q);
+      applyFilters();
+    }, 150);
+  });
+  input.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') { dd.classList.remove('open'); input.blur(); }
+    if (e.key === 'Enter') { dd.classList.remove('open'); document.querySelector('.events-wrap').scrollIntoView({behavior:'smooth',block:'start'}); }
+  });
+  document.addEventListener('click', function(e) { if (!e.target.closest('.nav-search')) dd.classList.remove('open'); });
+}
+
+function renderDropdown(q) {
+  var dd = document.getElementById('search-dropdown');
+  if (!q || q.length < 2) { dd.classList.remove('open'); return; }
+  var results = S.events.map(function(e){ return {e:e, s:scoreEvent(e,q)}; }).filter(function(r){return r.s>=20;}).sort(function(a,b){return b.s-a.s;}).slice(0,8).map(function(r){return r.e;});
+  if (!results.length) {
+    dd.innerHTML = '<div class="sd-empty">No results for "'+q+'"<span>Try different keywords</span></div>';
+  } else {
+    dd.innerHTML = '<div class="sd-header">'+results.length+' result'+(results.length!==1?'s':'')+'</div>' +
+      results.map(function(e) {
+        var cc = CAT_COLOR[e.category]||'#999';
+        var title = e.title.toLowerCase().includes(q.toLowerCase()) ? e.title.replace(new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi'),'<mark>$1</mark>') : e.title;
+        return '<div class="sd-item" onclick="pickResult('+JSON.stringify(e.id)+')">' +
+          '<div class="sd-dot" style="background:'+cc+'"></div>' +
+          '<div class="sd-info"><div class="sd-title">'+title+'</div><div class="sd-sub">'+formatDate(e.date)+' &middot; '+e.venue+'</div></div>' +
+          '<div class="sd-price'+(e.isFree?' free':'')+'">'+( e.isFree?'Free':'\u00A3'+e.price)+'</div>' +
+        '</div>';
+      }).join('');
+  }
+  dd.classList.add('open');
+}
+
+function pickResult(id) {
+  var e = S.events.find(function(ev){return ev.id===id;});
+  if (!e) return;
+  document.getElementById('search-input').value = e.title;
+  document.getElementById('search-dropdown').classList.remove('open');
+  S.query = e.title.toLowerCase();
+  applyFilters();
+  document.querySelector('.events-wrap').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ── APPLY FILTERS ──
+function applyFilters() {
+  var f = S.events.slice();
+  if (S.boroughs.size) f = f.filter(function(e){return S.boroughs.has(e.borough);});
+  if (S.type !== 'all') f = f.filter(function(e){return e.category===S.type;});
+  var now = new Date(), today = new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  if (S.date === 'today') f = f.filter(function(e){var d=new Date(e.date);d.setHours(0,0,0,0);return d.getTime()===today.getTime();});
+  else if (S.date === 'weekend') {
+    var dow=today.getDay(),sat=new Date(today);sat.setDate(today.getDate()+((6-dow+7)%7||7));var sun=new Date(sat);sun.setDate(sat.getDate()+1);
+    f=f.filter(function(e){var d=new Date(e.date);d.setHours(0,0,0,0);return d>=sat&&d<=sun;});
+  } else if (S.date === 'week') {
+    var wk=new Date(today);wk.setDate(today.getDate()+7);f=f.filter(function(e){return new Date(e.date)>=today&&new Date(e.date)<=wk;});
+  } else if (S.date === 'month') {
+    var mo=new Date(today);mo.setDate(today.getDate()+30);f=f.filter(function(e){return new Date(e.date)>=today&&new Date(e.date)<=mo;});
+  }
+  if (S.maxPrice < 200) f = f.filter(function(e){return e.isFree||e.price<=S.maxPrice;});
+  if (S.avail === 'available') f = f.filter(function(e){return e.availability!=='sold-out';});
+  else if (S.avail === 'free') f = f.filter(function(e){return e.isFree;});
+  if (S.query) {
+    f = f.filter(function(e){return scoreEvent(e,S.query)>=20;});
+    f.sort(function(a,b){return scoreEvent(b,S.query)-scoreEvent(a,S.query);});
+  } else {
+    f.sort(function(a,b){
+      if (S.sort==='date') return new Date(a.date)-new Date(b.date);
+      if (S.sort==='price-asc') return (a.isFree?0:a.price)-(b.isFree?0:b.price);
+      if (S.sort==='price-desc') return (b.isFree?0:b.price)-(a.isFree?0:a.price);
+      if (S.sort==='name') return a.title.localeCompare(b.title);
+      return 0;
+    });
+  }
+  S.filtered = f;
+  renderGrid();
+}
+
+// ── RENDER GRID ──
+function renderGrid() {
+  var grid = document.getElementById('events-grid'), count = document.getElementById('results-count');
+  if (!S.filtered.length && !S.events.length) {
+    grid.innerHTML = '<div class="loading-state"><div class="spinner"></div><p>Fetching London events...</p></div>';
+    count.innerHTML = 'LOADING...'; return;
+  }
+  if (!S.filtered.length) {
+    grid.innerHTML = '<div class="empty-state"><h3>No events found</h3><p>Try adjusting your filters or clearing the borough selection.</p></div>';
+    count.innerHTML = '<span>0</span> EVENTS'; return;
+  }
+  count.innerHTML = '<span>' + S.filtered.length + '</span> EVENTS';
+  grid.innerHTML = S.filtered.map(renderCard).join('');
+}
+
+function renderCard(e, i) {
+  var cc = CAT_COLOR[e.category]||'#999', ce = CAT_EMOJI[e.category]||'\u{1F4C5}';
+  var avail = e.availability||'available', bc = e.isFree?'free':avail;
+  var bt = e.isFree?'Free':(avail==='available'?'Available':avail==='fast'?'Selling Fast':'Sold Out');
+  var price = e.isFree?'Free':'\u00A3'+e.price;
+  var cta = avail==='sold-out' ? '<button class="card-cta sold-out" disabled>Sold Out</button>'
+          : e.isFree ? '<a href="'+e.url+'" target="_blank" class="card-cta free">Register Free</a>'
+          : avail==='fast' ? '<a href="'+e.url+'" target="_blank" class="card-cta fast">Buy Now</a>'
+          : '<a href="'+e.url+'" target="_blank" class="card-cta available">Get Tickets</a>';
+  var img = e.image ? '<img class="card-img" src="'+e.image+'" alt="" loading="lazy">'
+                    : '<div class="card-placeholder" style="background:'+cc+'15">'+ce+'</div>';
+  var review = e.review ? '<div class="card-review" style="color:'+cc+'"><div class="card-review-label">Past Experience</div><span style="color:var(--text-secondary)">'+e.review+'</span></div>' : '';
+  return '<div class="event-card'+(avail==='sold-out'?' sold-out':'')+'" style="animation-delay:'+(i*0.04)+'s">' +
+    img + '<div class="card-stripe" style="background:'+cc+'"></div>' +
+    '<div class="card-body">' +
+      '<div class="card-top"><div class="card-title">'+e.title+'</div><span class="avail-badge '+bc+'"><span class="avail-dot"></span>'+bt+'</span></div>' +
+      '<div class="card-meta">' +
+        '<span class="cat-pill" style="background:'+cc+'">'+ce+' '+e.category+'</span>' +
+        '<span class="card-meta-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>'+formatDate(e.date)+'</span>' +
+        '<span class="card-meta-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>'+e.venue+'</span>' +
+        '<span class="card-meta-item" style="font-size:11px;color:var(--text-muted)">\uD83D\uDCCD '+e.borough+'</span>' +
+      '</div>' +
+      '<div class="card-price'+(e.isFree?' free':'')+'">'+price+'</div>' +
+      review +
+    '</div>' +
+    '<div class="card-footer">'+cta+'<span class="card-source">'+e.source+'</span></div>' +
+  '</div>';
+}
+
+// ── UTILS ──
+function formatDate(d) {
+  if (!d) return '';
+  var date = new Date(d), now = new Date();
+  var today = new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  var evDay = new Date(date.getFullYear(),date.getMonth(),date.getDate());
+  var diff = Math.round((evDay-today)/86400000);
+  var time = date.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  if (diff===0) return 'Today, '+time;
+  if (diff===1) return 'Tomorrow, '+time;
+  if (diff<7) return date.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});
+  return date.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+}
+
+function showToast(msg) {
+  var t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');}, 4000);
+}
+
+// ── MODAL ──
+function openModal() { document.getElementById('tm-key').value=TM_KEY; document.getElementById('eb-key').value=EB_KEY; document.getElementById('modal-bg').classList.add('open'); }
+function closeModal() { document.getElementById('modal-bg').classList.remove('open'); }
+function saveKeys() {
+  TM_KEY = document.getElementById('tm-key').value.trim();
+  EB_KEY = document.getElementById('eb-key').value.trim();
+  localStorage.setItem('ll_tm', TM_KEY); localStorage.setItem('ll_eb', EB_KEY);
+  updateApiBtn(); closeModal(); S.events=[]; loadEvents();
+  showToast('Keys saved — loading live events...');
+}
+
+// ── DRAWER ──
+function openDrawer() { document.getElementById('drawer-bg').classList.add('open'); document.getElementById('drawer').classList.add('open'); }
+function closeDrawer() { document.getElementById('drawer-bg').classList.remove('open'); document.getElementById('drawer').classList.remove('open'); }
 </script>
 </body>
 </html>
