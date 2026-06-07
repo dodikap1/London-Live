@@ -253,6 +253,92 @@
     .motives-tags{display:none;}
   }
   @media(max-width:540px){.events-grid{grid-template-columns:1fr;}nav{padding:0 16px;}}
+
+  /* SEARCH DROPDOWN */
+  .search-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0; right: 0;
+    background: #1a1a1a;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    z-index: 999;
+    box-shadow: var(--shadow-xl);
+    display: none;
+    max-height: 400px;
+    overflow-y: auto;
+  }
+  .search-dropdown.open { display: block; }
+  .search-dropdown-header {
+    padding: 8px 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .search-result-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: background var(--transition);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .search-result-item:last-child { border-bottom: none; }
+  .search-result-item:hover { background: rgba(255,255,255,0.06); }
+  .search-result-cat {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .search-result-info { flex: 1; min-width: 0; }
+  .search-result-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .search-result-title mark {
+    background: rgba(255,217,61,0.3);
+    color: var(--accent-yellow);
+    border-radius: 2px;
+    padding: 0 1px;
+  }
+  .search-result-sub {
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+    margin-top: 1px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .search-result-price {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.6);
+    flex-shrink: 0;
+  }
+  .search-result-price.free { color: var(--avail-free); }
+  .search-no-results {
+    padding: 20px 14px;
+    text-align: center;
+    font-size: 13px;
+    color: rgba(255,255,255,0.35);
+    font-family: 'DM Mono', monospace;
+  }
+  .search-no-results span {
+    display: block;
+    font-size: 11px;
+    margin-top: 4px;
+    color: rgba(255,255,255,0.2);
+  }
 </style>
 </head>
 <body>
@@ -262,6 +348,7 @@
   <div class="nav-search">
     <svg class="nav-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
     <input type="text" id="search-input" placeholder="Search events, artists, venues..." autocomplete="off">
+    <div class="search-dropdown" id="search-dropdown"></div>
   </div>
   <div class="nav-right">
     <button class="api-btn" id="api-config-btn" onclick="openApiModal()">&#9881; Configure APIs</button>
@@ -703,9 +790,129 @@ function setupFilters() {
   document.getElementById('sort-select').addEventListener('change',function(e){state.sortBy=e.target.value;applyFilters();});
 }
 
+function fuzzyScore(str, query) {
+  // Returns a score 0-100. Higher = better match.
+  if (!query) return 0;
+  str = str.toLowerCase();
+  query = query.toLowerCase();
+  // Exact substring — highest score
+  if (str.includes(query)) return 100;
+  // All words present in any order
+  var words = query.split(/\s+/).filter(Boolean);
+  if (words.length > 1 && words.every(function(w) { return str.includes(w); })) return 85;
+  // Most words present
+  var matched = words.filter(function(w) { return str.includes(w); });
+  if (matched.length > 0) return Math.round(60 * matched.length / words.length);
+  // Character-level fuzzy — query chars appear in order in str
+  var qi = 0;
+  for (var si = 0; si < str.length && qi < query.length; si++) {
+    if (str[si] === query[qi]) qi++;
+  }
+  if (qi === query.length) return Math.max(10, Math.round(30 * query.length / str.length));
+  // Partial prefix on any word in title
+  var strWords = str.split(/\s+/);
+  var anyPrefix = strWords.some(function(sw) { return sw.startsWith(query) || query.startsWith(sw.slice(0,3)); });
+  if (anyPrefix) return 40;
+  return 0;
+}
+
+function searchEvents(query) {
+  if (!query || query.length < 2) return [];
+  return state.events.map(function(e) {
+    var score = Math.max(
+      fuzzyScore(e.title, query),
+      fuzzyScore(e.venue, query),
+      fuzzyScore(e.category, query),
+      fuzzyScore(e.borough, query)
+    );
+    return { event: e, score: score };
+  })
+  .filter(function(r) { return r.score >= 20; })
+  .sort(function(a, b) { return b.score - a.score; })
+  .slice(0, 8)
+  .map(function(r) { return r.event; });
+}
+
+function highlightMatch(text, query) {
+  if (!query) return text;
+  var idx = text.toLowerCase().indexOf(query.toLowerCase());
+  if (idx === -1) return text;
+  return text.slice(0, idx) + '<mark>' + text.slice(idx, idx + query.length) + '</mark>' + text.slice(idx + query.length);
+}
+
+function renderSearchDropdown(query) {
+  var dropdown = document.getElementById('search-dropdown');
+  if (!query || query.length < 2) {
+    dropdown.classList.remove('open');
+    return;
+  }
+  var results = searchEvents(query);
+  var html = '';
+  if (results.length === 0) {
+    html = '<div class="search-no-results">No events found for "' + query + '"<span>Try different keywords or check the spelling</span></div>';
+  } else {
+    html += '<div class="search-dropdown-header">' + results.length + ' result' + (results.length !== 1 ? 's' : '') + '</div>';
+    html += results.map(function(e) {
+      var cc = CAT_COLORS_RAW[e.category] || '#999';
+      var priceStr = e.isFree ? 'Free' : '£' + e.price;
+      var dateStr = formatDate(e.date);
+      return '<div class="search-result-item" onclick="selectSearchResult(' + JSON.stringify(e.id) + ')">' +
+        '<div class="search-result-cat" style="background:' + cc + '"></div>' +
+        '<div class="search-result-info">' +
+          '<div class="search-result-title">' + highlightMatch(e.title, query) + '</div>' +
+          '<div class="search-result-sub">' + dateStr + ' &middot; ' + e.venue + '</div>' +
+        '</div>' +
+        '<div class="search-result-price' + (e.isFree ? ' free' : '') + '">' + priceStr + '</div>' +
+      '</div>';
+    }).join('');
+  }
+  dropdown.innerHTML = html;
+  dropdown.classList.add('open');
+}
+
+function selectSearchResult(id) {
+  // Close dropdown, filter grid to just this event
+  var dropdown = document.getElementById('search-dropdown');
+  dropdown.classList.remove('open');
+  var e = state.events.find(function(ev) { return ev.id === id; });
+  if (e) {
+    document.getElementById('search-input').value = e.title;
+    state.searchQuery = e.title.toLowerCase();
+    applyFilters();
+    // Scroll to grid
+    document.querySelector('.events-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
 function setupSearch() {
   var debounce;
-  document.getElementById('search-input').addEventListener('input',function(e){clearTimeout(debounce);debounce=setTimeout(function(){state.searchQuery=e.target.value.toLowerCase().trim();applyFilters();},200);});
+  var input = document.getElementById('search-input');
+  input.addEventListener('input', function(e) {
+    clearTimeout(debounce);
+    var q = e.target.value.trim();
+    debounce = setTimeout(function() {
+      state.searchQuery = q.toLowerCase();
+      renderSearchDropdown(q);
+      applyFilters();
+    }, 150);
+  });
+  // Close dropdown on click outside
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.nav-search')) {
+      document.getElementById('search-dropdown').classList.remove('open');
+    }
+  });
+  // Close on Escape
+  input.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      document.getElementById('search-dropdown').classList.remove('open');
+      input.blur();
+    }
+    if (e.key === 'Enter') {
+      document.getElementById('search-dropdown').classList.remove('open');
+      document.querySelector('.events-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
 }
 
 async function loadEvents() {
@@ -754,7 +961,7 @@ function applyFilters(){
   if(state.maxPrice<200)filtered=filtered.filter(function(e){return e.isFree||e.price<=state.maxPrice;});
   if(state.availFilter==='available')filtered=filtered.filter(function(e){return e.availability!=='sold-out';});
   else if(state.availFilter==='free')filtered=filtered.filter(function(e){return e.isFree;});
-  if(state.searchQuery)filtered=filtered.filter(function(e){return e.title.toLowerCase().includes(state.searchQuery)||e.venue.toLowerCase().includes(state.searchQuery)||e.borough.toLowerCase().includes(state.searchQuery)||e.category.toLowerCase().includes(state.searchQuery);});
+  if(state.searchQuery){filtered=filtered.filter(function(e){return Math.max(fuzzyScore(e.title,state.searchQuery),fuzzyScore(e.venue,state.searchQuery),fuzzyScore(e.category,state.searchQuery),fuzzyScore(e.borough,state.searchQuery))>=20;});filtered.sort(function(a,b){var sa=Math.max(fuzzyScore(a.title,state.searchQuery),fuzzyScore(a.venue,state.searchQuery));var sb=Math.max(fuzzyScore(b.title,state.searchQuery),fuzzyScore(b.venue,state.searchQuery));return sb-sa;});}
   filtered.sort(function(a,b){if(state.sortBy==='date')return new Date(a.date)-new Date(b.date);if(state.sortBy==='price-asc')return(a.isFree?0:a.price)-(b.isFree?0:b.price);if(state.sortBy==='price-desc')return(b.isFree?0:b.price)-(a.isFree?0:a.price);if(state.sortBy==='name')return a.title.localeCompare(b.title);return 0;});
   state.filtered=filtered;renderGrid();
 }
